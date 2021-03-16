@@ -1,7 +1,16 @@
+/*
+ * @Author: your name
+ * @Date: 2021-03-16 15:18:38
+ * @LastEditTime: 2021-03-16 15:30:28
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \project\final\.eslintrc.js
+ */
 module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
     project: 'tsconfig.json',
+    tsconfigRootDir: __dirname,
     sourceType: 'module',
   },
   plugins: ['@typescript-eslint/eslint-plugin'],
