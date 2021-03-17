@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2021-03-16 18:53:06
+ * @LastEditTime: 2021-03-17 21:41:27
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \project\final\src\users\users.module.ts
+ */
 import { Module } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { TypeOrmModule } from '@nestjs/typeorm';

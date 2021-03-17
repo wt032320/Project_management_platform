@@ -1,16 +1,18 @@
-import { Controller, Get } from '@nestjs/common';
-import { ApiOperation } from '@nestjs/swagger';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
+import { User } from '../entities/user.entity';
 
+@ApiTags('新用户注册')
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private usersService: UsersService) {}
 
-  @Get()
+  @Post('regist')
   @ApiOperation({
-    summary: 'test',
+    summary: 'regist',
   })
-  getInfo(): string {
-    return this.usersService.findAll();
+  async registUser(@Body() userData: User) {
+    return await this.usersService.regist(userData);
   }
 }

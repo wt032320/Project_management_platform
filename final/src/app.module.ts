@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
 import { User } from './entities/user.entity';
+import { Log4jsModule } from '@nestx-log4js/core';
 
 @Module({
   imports: [
@@ -19,9 +19,11 @@ import { User } from './entities/user.entity';
       entities: [User],
       // synchronize: true, // 不应在生产中使用设置,否则可能回丢失生产数据
     }),
+    // 加载子模块
     UsersModule,
+    Log4jsModule.forRoot(),
   ],
-  controllers: [AppController, UsersController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
