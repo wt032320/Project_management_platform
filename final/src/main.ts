@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-16 15:18:39
- * @LastEditTime: 2021-03-17 21:45:04
+ * @LastEditTime: 2021-03-18 15:04:14
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \project\final\src\main.ts
@@ -41,5 +41,5 @@ const bootstrap = async () => {
   await app.listen(listenPost);
 };
 bootstrap().then(() => {
-  logger.log(`listen in http://localhost:${listenPost}`);
+  logger.log(`listen in http://localhost:${listenPost}/swagger-ui`);
 });

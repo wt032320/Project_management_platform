@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-16 18:53:38
- * @LastEditTime: 2021-03-17 21:39:47
+ * @LastEditTime: 2021-03-18 16:39:01
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \project\final\src\users\users.service.ts
@@ -31,15 +31,14 @@ export class UsersService {
     // await this.usersRepository.findOne(user.id).then((res) => {
     //   console.log(res);
     // });
-    await this.usersRepository
-      .findOne(user.id)
+    await this.findOneByPhone(user.id)
       .then((res) => {
         if (res) {
           throw Error('用户已注册');
         } else {
           try {
             this.usersRepository.save(user);
-            console.log('hhhhhh');
+            // console.log('hhhhhh');
           } catch (error) {
             throw Error('保存用户失败' + error);
           }
@@ -52,5 +51,14 @@ export class UsersService {
 
   async remove(id: string): Promise<void> {
     await this.usersRepository.delete(id);
+  }
+
+  /**
+   * @description: 通过手机号查询用户
+   * @param {string} id
+   * @return {*}
+   */
+  private async findOneByPhone(id: string) {
+    return await this.usersRepository.findOne(id)
   }
 }
