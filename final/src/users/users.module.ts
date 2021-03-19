@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-16 18:53:06
- * @LastEditTime: 2021-03-18 15:45:41
+ * @LastEditTime: 2021-03-19 19:36:17
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \project\final\src\users\users.module.ts
@@ -12,11 +12,19 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersController } from './users.controller';
 import { User } from '../entities/user.entity';
 import { HashPasswordMiddleware } from '../middlewares/hash-password.middleware';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from '../guards/auth.guard';
 
 @Module({
   // 该模块使用该forFeature()方法定义在当前作用域中注册了哪些存储库
   imports: [TypeOrmModule.forFeature([User])],
-  providers: [UsersService],
+  providers: [
+    UsersService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard 
+    }
+  ],
   controllers: [UsersController],
 })
 

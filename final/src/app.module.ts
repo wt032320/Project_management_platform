@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2021-03-16 15:18:39
+ * @LastEditTime: 2021-03-19 14:32:21
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \project\final\src\app.module.ts
+ */
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
