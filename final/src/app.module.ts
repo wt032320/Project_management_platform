@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-16 15:18:39
- * @LastEditTime: 2021-03-19 14:32:21
+ * @LastEditTime: 2021-03-21 17:11:35
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \project\final\src\app.module.ts
@@ -13,6 +13,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { User } from './entities/user.entity';
 import { Log4jsModule } from '@nestx-log4js/core';
+import { AuthModule } from './auth/auth.module';
+import { RedisModule, RedisModuleOptions } from 'nestjs-redis';
+
+const options: RedisModuleOptions = {
+  port: 6379,
+  name: 'management',
+  host: '127.0.0.1'
+}
 
 @Module({
   imports: [
@@ -30,6 +38,8 @@ import { Log4jsModule } from '@nestx-log4js/core';
     // 加载子模块
     UsersModule,
     Log4jsModule.forRoot(),
+    AuthModule,
+    RedisModule.register(options)
   ],
   controllers: [AppController],
   providers: [AppService],

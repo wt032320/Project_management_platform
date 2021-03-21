@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-16 15:18:39
- * @LastEditTime: 2021-03-18 15:04:14
+ * @LastEditTime: 2021-03-21 16:04:02
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \project\final\src\main.ts
@@ -28,6 +28,10 @@ const bootstrap = async () => {
     .setTitle('项目管理平台')
     .setDescription('xxx平台接口文档')
     .setVersion('1.0')
+    .addBearerAuth(
+      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      'jwt'
+    )
     // .addTag('cats')
     .build();
   const document = SwaggerModule.createDocument(app, config);

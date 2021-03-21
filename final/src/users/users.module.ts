@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-16 18:53:06
- * @LastEditTime: 2021-03-19 19:36:17
+ * @LastEditTime: 2021-03-21 20:25:35
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \project\final\src\users\users.module.ts
@@ -22,15 +22,11 @@ import { AuthGuard } from '../guards/auth.guard';
     UsersService,
     {
       provide: APP_GUARD,
-      useClass: AuthGuard 
+      useClass: AuthGuard
     }
   ],
   controllers: [UsersController],
+  exports: [UsersService],
 })
 
-export class UsersModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    // .forRouters('users') 为只在@Controller('users')中使用
-    consumer.apply(HashPasswordMiddleware).forRoutes('users/regist');
-  }
-}
+export class UsersModule  {}

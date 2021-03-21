@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-18 15:45:29
- * @LastEditTime: 2021-03-18 16:14:10
+ * @LastEditTime: 2021-03-21 13:58:39
  * @LastEditors: Please set LastEditors
  * @Description: 用户密码中间件
  * @FilePath: \project\final\src\middlewares\hash-password.middleware.ts
@@ -16,7 +16,7 @@ export class HashPasswordMiddleware implements NestMiddleware {
     let userPassword = req.body['password']
     if (userPassword) {
       const salt = addSalt()
-      userPassword = encript(userPassword, addSalt())
+      userPassword = encript(userPassword, salt)
       req.body['password'] = userPassword
       req.body['salt'] = salt
     }
