@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-16 18:53:38
- * @LastEditTime: 2021-03-21 17:20:22
+ * @LastEditTime: 2021-03-22 20:04:07
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \project\final\src\users\users.service.ts
@@ -42,6 +42,10 @@ export class UsersService {
   }
 
   public async hello() {
-    return await this.redis.set("management", "hello world")
+    // return await this.redis.set("management", "hello world")
+    return {
+      code: 0,
+      msg: 'hello world!'
+    }
   }
 }

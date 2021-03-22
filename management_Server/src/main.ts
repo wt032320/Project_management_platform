@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-16 15:18:39
- * @LastEditTime: 2021-03-21 16:04:02
+ * @LastEditTime: 2021-03-22 20:05:38
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \project\final\src\main.ts
@@ -41,6 +41,9 @@ const bootstrap = async () => {
    * @description: 使用log4js 日志框架
    */
   app.useLogger(app.get(Log4jsLogger));
+
+  // 允许跨域访问
+  app.enableCors();
 
   await app.listen(listenPost);
 };
