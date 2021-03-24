@@ -3,7 +3,6 @@
 
     <!-- 背景图片 -->
     <div class="login-img">
-      <img :src="login_background" />
       <div class="login-img-mask"></div>
     </div>
 
@@ -34,38 +33,28 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .login {
     position: absolute;
     width: 100%;
     height: 100%;
     display: flex;
-    .login-img {
-      width: 100%;
-      height: 100%;
+    justify-content: center;
+    align-items: center;
+    background: url('../assets/images/login/login_background.jpg') no-repeat;
+    background-size: cover;
+    .login-img-mask {
       position: absolute;
       left: 0;
       top: 0;
-      img {
-        width: 100%;
-        height: 100%;
-      }
-      .login-img-mask {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba($color: #000000, $alpha: 0.05);
-      }
+      width: 100%;
+      height: 100%;
+      background-color: rgba($color: #000000, $alpha: 0.05);
     }
     .login-card {
       width: 50%;
       height: 60%;
       position: absolute;
-      right: 10%;
-      top: 18%;
-      padding: 20px;
       border-radius: 10px;
       display: flex;
       .login-bg {
@@ -75,10 +64,10 @@ export default defineComponent({
         border-radius: 10px 0px 0px 10px;
       }
       .login-form {
-        width: 50%;
+        width: 55%;
         background-color: #fff;
-        padding: 70px 10px 0 60px;
-        border-radius: 0px 10px 10px 0px;
+        padding: 3rem 0.5rem 0 2.5rem;
+        border-radius: 0 10px 10px 0;
       }
     }
   }

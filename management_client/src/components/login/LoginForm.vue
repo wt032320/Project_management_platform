@@ -13,31 +13,42 @@
     <!-- 登录表单内容 -->
     <article>
       <el-form 
-        :model="LoginFormData" 
+        :model="userData" 
         :rules="rules" 
-        ref="LoginFormData" 
         label-width="100px" 
         class="login-form-body"
       >
         <el-form-item 
-          v-for="item in LoginForm" 
-          :key="item.title" 
-          :label="item.title" 
-          :prop="item.name"
-          :class="item.name"
+          label="手机号" 
+          prop="phone"
+          class="phone"
         >
-          <el-input v-model="item.value" :maxlength="item.meta.max"></el-input>
+          <el-input 
+            v-model="userData.phone" 
+            maxlength="11"
+          ></el-input>
+        </el-form-item>
+        <el-form-item 
+          label="登录密码"
+          prop="password"
+          class="password"
+        >
+          <el-input 
+            v-model="userData.password" 
+            maxlength="16"
+            type="password"
+          ></el-input>
         </el-form-item>
       </el-form>
       <el-checkbox 
-        v-model="ready"
+        v-model="isReady.ready"
         class="login-ready"
         >我已阅读并同意
         <span>《相关协议》</span>
       </el-checkbox>
       <div class="login-button">
         <el-button round type="warning">找回</el-button>
-        <el-button round type="primary">登录</el-button>
+        <el-button round type="primary" @click="login">登录</el-button>
       </div>
     </article>
 
@@ -45,7 +56,9 @@
     <footer>
       <h3>其他社交方式登录</h3>
       <div class="login-other">
-        <img class="login-icon" v-for="img in login_icons" :key="img" :src="img" />
+        <img class="login-icon" src="../../assets/images/login/weixin.png" />
+        <img class="login-icon" src="../../assets/images/login/qq.png" />
+        <img class="login-icon" src="../../assets/images/login/weibo.png" />
       </div>
     </footer>
   </div>
@@ -53,139 +66,134 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive } from "vue";
-import weixin from '../../assets/images/login/weixin.png';
-import qq from '../../assets/images/login/qq.png';
-import weibo from '../../assets/images/login/weibo.png';
+import { _login } from '../../api/auth/login';
 
 interface DataProps {
   phone: string;
   password: string;
 }
-
 export default defineComponent({
   name: 'LoginForm',
   components: {},
   setup() {
-    const LoginFormData: DataProps = reactive({
-      phone: "",
-      password: ""
-    });
-    // const refFormData = toRefs(LoginFormData);
+    const userData: DataProps = reactive({
+      phone: "15291083796",
+      password: "11111111",
+    })
 
-    const LoginForm = ref([
-      {
-        title: "手机号",
-        name: "phone",
-        value: "",
-        meta: {
-          max: 11
-        }
-      },
-      {
-        title: "登陆密码",
-        name: "password",
-        value: "",
-        meta: {
-          max: 30
-        }
+    // 校验规则
+    const rules = ref({
+      phone: [
+        { required: true, message: '请输入手机号', trigger: 'blur' },
+        { pattern: /^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$/, message: '请输入正确的手机号', trigger: 'blur' }
+      ],
+      password: [
+        { required: true, message: '请输入密码', trigger: 'blur' },
+        { min: 8, max: 16, message: '长度在8到16个字符', trigger: 'blur'}
+      ]
+    })
+
+    // 勾选协议
+    const isReady = ref({
+      ready: false
+    })
+
+    // 登录方法
+    async function login() {
+      const result = await _login(userData)
+      console.log(result)
+      if(result.token) {
+        localStorage.setItem('token', result.token)
       }
-    ])
+    }
 
-    return { 
-      LoginForm,
-      LoginFormData,
+    return {
+      userData,
+      rules,
+      isReady,
+      login,
     }
   },
-
-  data() {
-    return {
-      rules: {
-        phone: [
-          { required: true, message: '请输入手机号', trigger: 'blur' },
-          { pattern: /^1([358][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$/, message: '请输入正确的手机号', trigger: 'blur' }
-        ],
-        password: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 8, max: 16, message: '长度在8到16个字符', trigger: 'blur'}
-        ]
-      },
-      ready: false,
-      login_icons: [weixin, weibo, qq],
-    }
-  }
 })
 </script>
 
-<style lang="scss">
-  .login-form {
-    .login-title {
-      h2 {
-        font-size: 34px;
-      }
-      h4 {
-        font-size: 14px;
-        color: rgba($color: gray, $alpha: 0.7);
-        letter-spacing: 1px;
-        padding-top: 8px 0;
-        .login-regist {
-          color: #426ab3;
-        }
-        .login-regist:hover {
-          color: #6a6da9;
-          cursor: pointer;
-        }
-      }
+<style lang="scss" scoped>
+.login-form {
+  .login-title {
+    width: 80%;
+    height: 15%;
+    h2 {
+      font-size: 1.2rem;
     }
-    article {
-      .login-form-body {
-        .phone,
-        .password {
-          width: 80%;
-          padding: 16px;
-        }
-        .password {
-          padding-top: 5px;
-        }
+    h4 {
+      font-size: 0.6rem;
+      color: rgba($color: gray, $alpha: 0.7);
+      letter-spacing: 0.1rem;
+      padding: 0.2rem 0%;
+      .login-regist {
+        color: #426ab3;
       }
-      .login-ready {
-        span {
-          color: #426ab3;
-        }
-        span:hover {
-          color: #6a6da9;
-          cursor: pointer;
-        }
-      }
-      .login-button {
-        text-align: right;
-        padding: 20px 15% 0 0;
-        padding-right: 15%;
-        padding-top: 10px;
-        button {
-          width: 40%;
-        }
-      }
-    }
-    footer {
-      position: absolute;
-      bottom: 10%;
-      width: 60%;
-      h3 {
-        color: rgba($color: gray, $alpha: 0.8);
-        font-size: 14px;
-        letter-spacing: 1px;
-      }
-      .login-other {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 80%;
-        .login-icon {
-          width: 3rem;
-          height: 3rem;
-          padding: 0 1rem;
-        }
+      .login-regist:hover {
+        color: #6a6da9;
+        cursor: pointer;
       }
     }
   }
+  article {
+    width: 100%;
+    height: 60%;
+    .login-form-body {
+      height: 60%;
+      .phone,
+      .password {
+        width: 80%;
+        padding:  0.4rem;
+      }
+      .password {
+        padding-top: 0%;
+      }
+    }
+    .login-ready {
+      height: 12%;
+      padding-top: 0.45rem;
+      span {
+        color: #426ab3;
+      }
+      span:hover {
+        color: #6a6da9;
+        cursor: pointer;
+      }
+    }
+    .login-button {
+      text-align: right;
+      height: 28%;
+      padding: 0.4rem 15% 0 0;
+      button {
+        width: 35%;
+      }
+    }
+  }
+  footer {
+    position: absolute;
+    width: 60%;
+    height: 25%;
+    padding: 0.6rem 0;
+    h3 {
+      color: rgba($color: gray, $alpha: 0.8);
+      font-size: 0.6rem;
+      letter-spacing: 0.1rem;
+    }
+    .login-other {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-top: 0.4rem;
+      width: 80%;
+      .login-icon {
+        max-width: 2rem;
+        padding: 0 1rem;
+      }
+    }
+  }
+}
 </style>

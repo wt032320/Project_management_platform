@@ -22,14 +22,5 @@
     "typescript": "^4.1.3",
     "vite": "^2.1.0",
     "vue-tsc": "^0.0.8"
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {},
-      "postcss-pxtorem": {
-        "rootValue":  120,
-        "propList":["*"]
-      }  
-    }
   }
 }
