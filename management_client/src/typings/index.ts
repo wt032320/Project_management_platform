@@ -13,6 +13,7 @@ interface INuser {
 interface IUser {
   phone: string;
   password: string;
+  isAgree: boolean;
 }
 
 interface IState {

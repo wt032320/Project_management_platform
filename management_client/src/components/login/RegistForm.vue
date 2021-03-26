@@ -18,6 +18,8 @@
         ref="registForm"
         class="regist-form-body"
       >
+        <!-- 1.<el-form-item中的prop必须等于<el-input中v-model="registFormData.value"
+            2.rules中的规则名称也需要和registFormData中属性定义的名称相同 -->
         <el-form-item 
           label="手机号" 
           prop="phone"

@@ -89,6 +89,9 @@ export default defineComponent({
       isAgree: false, // 是否同意协议
     })
 
+    // 自定义校验规则
+    // 验证通过： callback()
+    // 验证失败： callback(new Error('错误消息'))
     const validateAgree = (rule: any, value: any, callback: any) => {
       if (value) {
         callback()
@@ -109,9 +112,6 @@ export default defineComponent({
       ],
       isAgree: [
         {
-          // 自定义校验规则
-          // 验证通过： callback()
-          // 验证失败： callback(new Error('错误消息'))
           validator: validateAgree,
           trigger: 'change'
         }
