@@ -3,15 +3,28 @@ import { IEvent } from "@/typings";
 import { Store, useStore } from 'vuex';
 import { SETEVENT } from '../../store/actionType';
 
-const store: Store<any> = useStore()
-
-function setEvent(eventName: string): void {
-  const event: IEvent = {
-    event: eventName
-  }
-  store.dispatch(SETEVENT, event)
+interface IUse {
+  setEvent: (value: IEvent) => void;
 }
 
-export default {
-  setEvent
+function useEvent(): IUse {
+  const store: Store<any> = useStore()
+
+  function setEvent(eventName: string): void {
+    const event: IEvent = {
+      event: eventName
+    }
+    store.dispatch(SETEVENT, event)
+  }
+
+  return  {
+    setEvent
+  }
+
+}
+
+
+export {
+  useEvent,
+  IUse,
 }

@@ -5,7 +5,7 @@
       <h2>登录</h2>
       <h4>
         你尚未拥有账户? 点击
-        <span class="login-regist" @click="regist('regist')">注册</span>
+        <span class="login-regist" @click="setEvent('regist')">注册</span>
         进行登录
       </h4>
     </header>
@@ -15,13 +15,13 @@
       <el-form 
         :model="userData" 
         :rules="rules" 
-        label-width="100px" 
         class="login-form-body"
       >
         <el-form-item 
           label="手机号" 
           prop="phone"
           class="phone"
+          label-width="100px"
         >
           <el-input 
             v-model="userData.phone" 
@@ -32,6 +32,7 @@
           label="登录密码"
           prop="password"
           class="password"
+          label-width="100px"
         >
           <el-input 
             v-model="userData.password" 
@@ -39,26 +40,33 @@
             type="password"
           ></el-input>
         </el-form-item>
+        <div class="login-button">
+          <el-button round type="warning" @click="setEvent('alter')">找回</el-button>
+          <el-button round type="primary" @click="login">登录</el-button>
+        </div>
+        <el-form-item prop="isAgree" class="login-ready" >
+          <el-checkbox 
+            v-model="userData.isAgree"
+            label-width="100px"
+            >我已阅读并同意
+            <span @click="DialogTableVisible.dialogTableVisible = true">《相关协议》</span>
+            <el-dialog title="用户协议" v-model="DialogTableVisible.dialogTableVisible">
+              <div class="">
+                <h1>hello</h1>
+              </div>
+            </el-dialog>
+          </el-checkbox>
+        </el-form-item>
       </el-form>
-      <el-checkbox 
-        v-model="isReady.ready"
-        class="login-ready"
-        >我已阅读并同意
-        <span>《相关协议》</span>
-      </el-checkbox>
-      <div class="login-button">
-        <el-button round type="warning" @click="setEvent('alter')">找回</el-button>
-        <el-button round type="primary" @click="login">登录</el-button>
-      </div>
     </article>
 
     <!-- 登录表单底部 -->
     <footer>
       <h3>其他社交方式登录</h3>
       <div class="login-other">
-        <img class="login-icon" src="../../assets/images/login/weixin.png" />
-        <img class="login-icon" src="../../assets/images/login/qq.png" />
-        <img class="login-icon" src="../../assets/images/login/weibo.png" />
+        <img class="login-icon" src="../../assets/images/auth/weixin.png" />
+        <img class="login-icon" src="../../assets/images/auth/qq.png" />
+        <img class="login-icon" src="../../assets/images/auth/weibo.png" />
       </div>
     </footer>
   </div>
@@ -67,9 +75,9 @@
 <script lang="ts">
 import { defineComponent, ref, reactive } from "vue";
 import { _login } from '../../api/auth/auth';
-import { IUser } from "../../typings";
+import { IUser, IEvent } from "../../typings";
 
-import  setEvent  from '../../hooks/login/index'
+import  { useEvent, IUse }  from '../../hooks/login/index'
 
 export default defineComponent({
   name: 'LoginForm',
@@ -78,7 +86,16 @@ export default defineComponent({
     const userData: IUser = reactive({
       phone: "15291083796",
       password: "11111111",
+      isAgree: false, // 是否同意协议
     })
+
+    const validateAgree = (rule: any, value: any, callback: any) => {
+      if (value) {
+        callback()
+      } else {
+        callback(new Error('请勾选用户协议'))
+      }
+    }
 
     // 校验规则
     const rules = ref({
@@ -89,30 +106,40 @@ export default defineComponent({
       password: [
         { required: true, message: '请输入密码', trigger: 'blur' },
         { min: 8, max: 16, message: '长度在8到16个字符', trigger: 'blur'}
+      ],
+      isAgree: [
+        {
+          // 自定义校验规则
+          // 验证通过： callback()
+          // 验证失败： callback(new Error('错误消息'))
+          validator: validateAgree,
+          trigger: 'change'
+        }
       ]
     })
 
-    // 勾选协议
-    const isReady = ref({
-      ready: false
+
+    const DialogTableVisible = ref({
+      dialogTableVisible: false,
     })
 
     // 登录方法
     async function login() {
-      const result = await _login(userData)
+      const result:any = await _login(userData)
       console.log(result)
       if(result.token) {
         localStorage.setItem('token', result.token)
       }
     }
 
+    const { setEvent }: IUse = useEvent()
 
     return {
       userData,
       rules,
-      isReady,
+      DialogTableVisible,
       login,
-      setEvent
+      setEvent,
     }
   },
 })
@@ -152,11 +179,13 @@ export default defineComponent({
       }
       .password {
         padding-top: 0%;
+        margin-bottom: 0;
       }
     }
     .login-ready {
       height: 12%;
       padding-top: 0.45rem;
+      margin-bottom: 0;
       span {
         color: #426ab3;
       }
