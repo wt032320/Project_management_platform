@@ -15,21 +15,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, computed } from "vue";
 import LoginForm from "../components/login/LoginForm.vue";
-import login_background from '../assets/images/login/login_background.jpg';
+import { watch } from "vue";
+import { Store, useStore } from 'vuex';
 
 export default defineComponent({
   name: 'Login',
   components: {
     LoginForm
   },
-  setup() {},
-  data() {
-    return {
-      login_background,
-    }
-  }
+  setup() {
+    const newLocal=useStore();
+    const store: Store<any> = newLocal
+    const event = computed(() => {
+      return store.state.list
+    })
+    watch(event, () => [
+      console.log('to do sths')
+    ])
+  },
 })
 </script>
 

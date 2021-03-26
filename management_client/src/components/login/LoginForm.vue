@@ -5,7 +5,7 @@
       <h2>登录</h2>
       <h4>
         你尚未拥有账户? 点击
-        <span class="login-regist">注册</span>
+        <span class="login-regist" @click="regist('regist')">注册</span>
         进行登录
       </h4>
     </header>
@@ -47,7 +47,7 @@
         <span>《相关协议》</span>
       </el-checkbox>
       <div class="login-button">
-        <el-button round type="warning">找回</el-button>
+        <el-button round type="warning" @click="setEvent('alter')">找回</el-button>
         <el-button round type="primary" @click="login">登录</el-button>
       </div>
     </article>
@@ -66,17 +66,16 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive } from "vue";
-import { _login } from '../../api/auth/login';
+import { _login } from '../../api/auth/auth';
+import { IUser } from "../../typings";
 
-interface DataProps {
-  phone: string;
-  password: string;
-}
+import  setEvent  from '../../hooks/login/index'
+
 export default defineComponent({
   name: 'LoginForm',
   components: {},
   setup() {
-    const userData: DataProps = reactive({
+    const userData: IUser = reactive({
       phone: "15291083796",
       password: "11111111",
     })
@@ -107,11 +106,13 @@ export default defineComponent({
       }
     }
 
+
     return {
       userData,
       rules,
       isReady,
       login,
+      setEvent
     }
   },
 })

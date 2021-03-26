@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import { ElMessage } from 'element-plus';
 
 interface IResponse {
   code: number;
@@ -22,7 +23,10 @@ api.interceptors.request.use((req: AxiosRequestConfig) => {
 api.interceptors.response.use((res: AxiosResponse) => {
   const response: IResponse = res.data;
   if (response.code !== 0) {
-    console.warn(response.msg)
+    ElMessage.warning({
+      message: response.msg,
+      type: 'warning'
+    });
   }
   return res.data.msg;
 }, err => console.log(err))

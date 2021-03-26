@@ -1,17 +1,13 @@
 import { createStore } from 'vuex'
 
-// Create a new store instance.
-const store = createStore({
-  state () {
-    return {
-      count: 0
-    }
-  },
-  mutations: {
-    increment (state: any) {
-      state.count++
-    }
-  }
+import state from './state'
+import mutations from './mutations'
+import actions from './actions'
+
+const store =  createStore({
+  state,
+  mutations,
+  actions
 })
 
 export default store
