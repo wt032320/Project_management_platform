@@ -94,7 +94,7 @@ export default defineComponent({
       .auth-form {
         width: 55%;
         background-color: #fff;
-        padding: 3rem 0.5rem 0 2.5rem;
+        padding: 1rem 0.5rem 0 2.5rem;
         border-radius: 0 10px 10px 0;
       }
 

@@ -2,7 +2,7 @@
   <div class="regist-form">
     <!-- 注册表单头部 -->
     <header class="regist-title">
-      <h2>注册</h2>
+      <h2  @click="getNewCaptcha('-1')">注册</h2>
       <h4>
         已有用户? 点击
         <span class="regist-regist" @click="setEvent('login')">登录</span>
@@ -13,7 +13,7 @@
     <!-- 注册表单内容 -->
     <article>
       <el-form 
-        :model="registFromData" 
+        :model="registFormData" 
         :rules="rules" 
         ref="registForm"
         class="regist-form-body"
@@ -27,7 +27,7 @@
           label-width="100px" 
         >
           <el-input 
-            v-model="registFromData.phone" 
+            v-model="registFormData.phone" 
             maxlength="11"
             placeholder="请输入手机号"
           ></el-input>
@@ -39,7 +39,7 @@
           label-width="100px" 
         >
           <el-input 
-            v-model="registFromData.password" 
+            v-model="registFormData.password" 
             maxlength="16"
             type="password"
             placeholder="请输入密码"
@@ -52,16 +52,26 @@
           label-width="100px" 
         >
           <el-input 
-            v-model="registFromData.repassword" 
+            v-model="registFormData.repassword" 
             maxlength="16"
             type="password"
             placeholder="请再次输入密码"
           ></el-input>
         </el-form-item>
+
+        <!-- 验证码 -->
+        <el-form-item class="captcha" prop="captcha" label="验证码" label-width="100px">
+          <div class="captcha-inside">
+            <el-input v-model="registFormData.captcha" ></el-input>
+            <div v-html="registFormData.captchas.img" class="svg" @click="getNewCaptcha(registFormData.captchas.id)"></div>
+          </div>
+        </el-form-item>
+
+        <!-- 用户协议 -->
         <el-form-item prop="isAgree" class="regist-ready" >
           <el-checkbox
             label-width="120px"
-            v-model="registFromData.isAgree"
+            v-model="registFormData.isAgree"
           >我已阅读并同意
             <span @click="dialogTableVisible = true">《相关协议》</span>
             <el-dialog title="用户协议" v-model="dialogTableVisible">
@@ -77,16 +87,13 @@
         </el-form-item>
       </el-form>
     </article>
-
-    <!-- 验证码 -->
-    <footer></footer>
   </div>
 
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, getCurrentInstance } from "vue";
-import { _regist } from '../../api/auth/auth';
+import { defineComponent, ref, reactive, getCurrentInstance, onMounted } from "vue";
+import { _regist, _captcha, _verify } from '../../api/auth/auth';
 import { IEvent, INuser } from "../../typings";
 
 import  { useEvent, IUse }  from '../../hooks/login/index'
@@ -99,14 +106,22 @@ export default defineComponent({
     const { ctx }  = getCurrentInstance()
     const { setEvent }: IUse = useEvent()
 
-    const registFromData: INuser = reactive({
+    const registFormData: INuser = reactive({
       phone: "",
       password: "",
       repassword: "",
-      isAgree: true, // 是否同意协议
-      captcha: "" // 验证码
+      isAgree: false, // 是否同意协议
+      captcha: "", // 验证码
+      captchas: '' // 后端返回的验证码
     })
 
+    /**
+     * @description: 自定义校验方法
+     * @param {*} rule
+     * @param {*} value
+     * @param {*} callback
+     * @return {*}
+     */
     const validateAgree = (rule: any, value: any, callback: any) => {
       if (value) {
         callback()
@@ -137,48 +152,73 @@ export default defineComponent({
           validator: validateAgree,
           trigger: 'change'
         }
+      ],
+      captcha: [
+        { required: true, message: '请输入验证码', trigger: 'blur' },
       ]
     })
 
     const dialogTableVisible: string = ref(false)
 
+    /**
+     * @description: 发送注册请求的方法
+     * @param {*}
+     * @return {*}
+     */
     async function sedRegist() {
-      if (registFromData.password !== registFromData.repassword) {
+      if (registFormData.password !== registFormData.repassword) {
         ElMessage.warning({
           message: '两次密码输入不相同',
           type: 'warning'
         })
       }
-      const result = await _regist({
-        phone: registFromData.phone,
-        password: registFromData.password
-      })
-      if (result.length === 6) {
-        ElMessage.success({
-          message: result,
-          type: 'success',
-        })
-        setEvent('login')
+      const captcha = {
+        captcha: registFormData.captcha,
+        id: registFormData.captchas.id
       }
-      
+      _verify(captcha).then(async(res) => {
+        const result = await _regist({
+          phone: registFormData.phone,
+          password: registFormData.password
+        })
+        if (result.length === 6) {
+          ElMessage.success({
+            message: result,
+            type: 'success',
+          })
+          setEvent('login')
+        }
+      })
     }
 
     // 注册方法
     function regist() {
       ctx.$refs['registForm'].validate((valid) => {
-          if (valid) {
-            sedRegist()
-          } else {
-            return false;
-          }
-        });
-    
+        if (valid) {
+          sedRegist()
+        } else {
+          return false;
+        }
+      });
     }
 
+    // 获取新的验证码
+    async function getNewCaptcha(id?: string) {
+      await _captcha(id).then((res) => {
+        registFormData.captchas = res
+      })
+    }
+    
+    // 注册失败 清空表单
+    onMounted(() => {
+      getNewCaptcha()
+    })
+    
     return {
-      registFromData,
+      registFormData,
       rules,
       dialogTableVisible,
+      getNewCaptcha,
       regist,
       setEvent,
     }
@@ -217,11 +257,28 @@ export default defineComponent({
       .password,
       .repassword {
         width: 80%;
+        margin-bottom: 0;
+        padding-bottom: 1rem;
       }
     }
 
+    .captcha {
+      height: 3rem;
+      width: 100%;
+      margin-bottom: 0;
+      margin-right: 0;
+      .captcha-inside {
+        display: flex;
+        align-items: flex-start;
+        .svg {
+          height: 2.5rem;
+        }
+      }
+
+    }
+
     .regist-ready {
-      height: 25%;
+      height: 20%;
       margin-bottom: 0;
       text-align: left;
       span {

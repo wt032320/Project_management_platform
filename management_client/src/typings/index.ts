@@ -8,6 +8,7 @@ interface INuser {
   repassword: string;
   isAgree: boolean;
   captcha: string;
+  captchas: object;
 }
 
 interface IUser {

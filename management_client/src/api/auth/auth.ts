@@ -36,3 +36,29 @@ export async function _regist(user: IUserInfo) {
     data: user
   })
 }
+
+/**
+ * @description: 获取注册验证码
+ * @param {*}
+ * @return {*}
+ */
+export async function _captcha(id?: string) {
+  const nid: string = id ? id : '-1'
+  return await api({
+    method: "GET",
+    url: `auth/captcha/{${nid}}`,
+  })
+}
+
+/**
+ * @description: 验证注册验证码
+ * @param {object} captcha
+ * @return {*}
+ */
+export async function _verify(captcha: { captcha: string, id: string }) {
+  return await api({
+    method: "POST",
+    url: "auth/verify",
+    data: captcha                                
+  })
+}

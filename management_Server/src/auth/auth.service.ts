@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-21 09:57:12
- * @LastEditTime: 2021-03-21 20:19:17
+ * @LastEditTime: 2021-03-27 21:34:32
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \project\final\src\auth\auth.service.ts
@@ -16,10 +16,13 @@ import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 
 const logger = new Logger('auth.service')
+const svgCaptcha = require('svg-captcha');
 
 @Injectable()
 export class AuthService {
   protected response: IResponse;
+  private pointer: number = 0; // 定义指示器
+  private captchas = {}; // 保存验证码信息
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
@@ -153,4 +156,40 @@ export class AuthService {
     return await this.jwtService.sign(user)
   }
 
+  /**
+   * @description: 使用 svg-captcha包 创建验证码
+   * @param {*}
+   * @return {*}
+   */
+  public async createCaptcha(id?: string) {
+    if (id !== '-1') {
+      delete this.captchas[id]
+    }
+    const c = svgCaptcha.create()
+    this.captchas[this.pointer] = c.text
+    this.response = {
+      code: 0,
+      msg: {
+        id: this.pointer++,
+        img: c.data
+      }
+    }
+    return this.response
+  }
+
+  //  验证注册验证码
+  public async verification(captcha: string, id: string) {
+    if (this.captchas[id] === captcha) {
+      this.response = {
+        code: 0,
+        msg: "验证通过"
+      }
+    } else {
+      this.response = {
+        code: -5,
+        msg: "验证码错误"
+      }
+    }
+    return this.response
+  }
 }

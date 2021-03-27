@@ -15,6 +15,7 @@
       <el-form 
         :model="userData" 
         :rules="rules" 
+        ref="login-form"
         class="login-form-body"
       >
         <el-form-item 
@@ -49,8 +50,8 @@
             v-model="userData.isAgree"
             label-width="100px"
             >我已阅读并同意
-            <span @click="DialogTableVisible.dialogTableVisible = true">《相关协议》</span>
-            <el-dialog title="用户协议" v-model="DialogTableVisible.dialogTableVisible">
+            <span @click="dialogTableVisible = true">《相关协议》</span>
+            <el-dialog title="用户协议" v-model="dialogTableVisible">
               <div class="">
                 <h1>hello</h1>
               </div>
@@ -73,7 +74,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive } from "vue";
+import { defineComponent, ref, reactive, getCurrentInstance } from "vue";
 import { _login } from '../../api/auth/auth';
 import { IUser, IEvent } from "../../typings";
 
@@ -118,18 +119,26 @@ export default defineComponent({
       ]
     })
 
+    // 用户协议
+    const dialogTableVisible = ref(false)
 
-    const DialogTableVisible = ref({
-      dialogTableVisible: false,
-    })
-
+    const { ctx } = getCurrentInstance()
     // 登录方法
-    async function login() {
-      const result:any = await _login(userData)
-      console.log(result)
-      if(result.token) {
-        localStorage.setItem('token', result.token)
-      }
+    function login() {
+      ctx.$refs['login-form'].validate(async(value) => {
+        if (value) {
+          const result:any = await _login({
+            phone: userData.phone,
+            password: userData.password
+          })
+          console.log(result)
+          if(result.token) {
+            localStorage.setItem('token', result.token)
+          }
+        } else {
+          return false
+        }
+      })
     }
 
     const { setEvent }: IUse = useEvent()
@@ -137,7 +146,7 @@ export default defineComponent({
     return {
       userData,
       rules,
-      DialogTableVisible,
+      dialogTableVisible,
       login,
       setEvent,
     }
@@ -176,6 +185,7 @@ export default defineComponent({
       .password {
         width: 80%;
         padding:  0.4rem;
+        margin-bottom: 0;
       }
       .password {
         padding-top: 0%;
@@ -197,7 +207,7 @@ export default defineComponent({
     .login-button {
       text-align: right;
       height: 28%;
-      padding: 0.4rem 15% 0 0;
+      padding: 0.4rem 15%  0;
       button {
         width: 35%;
       }
@@ -207,7 +217,7 @@ export default defineComponent({
     position: absolute;
     width: 60%;
     height: 25%;
-    padding: 0.6rem 0;
+    padding: 0;
     h3 {
       color: rgba($color: gray, $alpha: 0.8);
       font-size: 0.6rem;

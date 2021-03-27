@@ -1,5 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import Auth from '../views/Auth.vue'
+
+// 路由懒加载
+const Auth = () => import('../views/Auth.vue')
 
 const routes = [
   { 
