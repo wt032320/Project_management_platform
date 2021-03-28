@@ -28,7 +28,7 @@ api.interceptors.response.use((res: AxiosResponse) => {
       type: 'warning'
     });
   }
-  return res.data.msg;
+  return response;
 }, err => console.log(err))
 
 export default api

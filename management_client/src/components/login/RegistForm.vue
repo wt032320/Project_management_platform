@@ -62,7 +62,7 @@
         <!-- 验证码 -->
         <el-form-item class="captcha" prop="captcha" label="验证码" label-width="100px">
           <div class="captcha-inside">
-            <el-input v-model="registFormData.captcha" ></el-input>
+            <el-input v-model="registFormData.captcha" placeholder="区分大小写"></el-input>
             <div v-html="registFormData.captchas.img" class="svg" @click="getNewCaptcha(registFormData.captchas.id)"></div>
           </div>
         </el-form-item>
@@ -83,7 +83,7 @@
         </el-form-item>
       
         <el-form-item class="regist-button" >
-          <el-button round type="primary" @click="regist">注册</el-button>
+          <el-button round type="primary" @click="regist" :loading="isLoading">注册</el-button>
         </el-form-item>
       </el-form>
     </article>
@@ -115,6 +115,7 @@ export default defineComponent({
       captchas: '' // 后端返回的验证码
     })
 
+    let isLoading: boolean = ref(false)
     /**
      * @description: 自定义校验方法
      * @param {*} rule
@@ -172,21 +173,30 @@ export default defineComponent({
           type: 'warning'
         })
       }
+      // 开启loading...
+      // ctx.isLoading = true
       const captcha = {
         captcha: registFormData.captcha,
         id: registFormData.captchas.id
       }
-      _verify(captcha).then(async(res) => {
-        const result = await _regist({
-          phone: registFormData.phone,
-          password: registFormData.password
-        })
-        if (result.length === 6) {
-          ElMessage.success({
-            message: result,
-            type: 'success',
+      await _verify(captcha).then(async res => {
+        if (res.code === 0) {
+          await _regist({
+            phone: registFormData.phone,
+            password: registFormData.password
+          }).then(res => {
+            if (res.code === 0) {
+              ElMessage.success({
+                message: res.msg,
+                type: 'success',
+              })
+              // 关闭Loading...
+              // ctx.isLoading = false
+              setEvent('login')
+            }
           })
-          setEvent('login')
+        } else {
+          getNewCaptcha()
         }
       })
     }
@@ -205,11 +215,17 @@ export default defineComponent({
     // 获取新的验证码
     async function getNewCaptcha(id?: string) {
       await _captcha(id).then((res) => {
-        registFormData.captchas = res
+        registFormData.captchas = res.msg
       })
     }
-    
+
     // 注册失败 清空表单
+    // async function resetForm(formName: string) {
+    //   ctx.$refs[formName].resetFields()
+    //   await getNewCaptcha()
+    // }
+    
+    // 在组件挂载到页面之前 获取一个验证码
     onMounted(() => {
       getNewCaptcha()
     })
@@ -218,6 +234,7 @@ export default defineComponent({
       registFormData,
       rules,
       dialogTableVisible,
+      isLoading,
       getNewCaptcha,
       regist,
       setEvent,

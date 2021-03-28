@@ -17,9 +17,14 @@
       <regist-form class="auth-form"></regist-form>
     </div>
 
-    <div class="auth-card" v-else-if="event = 'alter'">
+    <div class="auth-card" v-else-if="event === 'alter'">
       <div class="auth-bg"></div>
       <alter-form class="auth-form"></alter-form>
+    </div>
+
+    <div class="auth-card" v-else-if="event === 'message'">
+      <div class="auth-bg"></div>
+      <message-form class="auth-form"></message-form>
     </div>
   </div>
 </template>
@@ -29,8 +34,11 @@ import { defineComponent, computed, reactive, toRefs } from "vue";
 import LoginForm from "../components/login/LoginForm.vue";
 import RegistForm from "../components/login/RegistForm.vue";
 import AlterForm from "../components/login/AlterForm.vue";
+import MessageForm from "../components/login/MessageForm.vue";
+
 import { watch } from "vue";
 import { Store, useStore } from 'vuex';
+import { IEvent } from "../typings";
 
 export default defineComponent({
   name: 'Auth',
@@ -38,10 +46,11 @@ export default defineComponent({
     LoginForm,
     RegistForm,
     AlterForm,
+    MessageForm
   },
   setup() {
-    const data = reactive({
-      event: 'regist'
+    const data: IEvent = reactive({
+      event: 'message'
     })
     const refData = toRefs(data)
 
@@ -55,7 +64,7 @@ export default defineComponent({
     })
 
     return {
-      ...refData
+      ...refData,
     }
   }
 })

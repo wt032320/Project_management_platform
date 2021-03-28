@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-21 09:57:12
- * @LastEditTime: 2021-03-27 21:34:32
+ * @LastEditTime: 2021-03-28 19:15:41
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \project\final\src\auth\auth.service.ts
@@ -167,6 +167,7 @@ export class AuthService {
     }
     const c = svgCaptcha.create()
     this.captchas[this.pointer] = c.text
+    console.log(this.captchas)
     this.response = {
       code: 0,
       msg: {
