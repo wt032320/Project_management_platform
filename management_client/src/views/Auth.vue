@@ -50,7 +50,7 @@ export default defineComponent({
   },
   setup() {
     const data: IEvent = reactive({
-      event: 'message'
+      event: 'login'
     })
     const refData = toRefs(data)
 

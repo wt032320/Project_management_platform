@@ -4,6 +4,7 @@
  * @return {*}
  */
 
+import { ICaptcha } from '@/typings';
 import api from '..';
 
 interface IUserInfo {
@@ -55,7 +56,7 @@ export async function _captcha(id?: string) {
  * @param {object} captcha
  * @return {*}
  */
-export async function _verify(captcha: { captcha: string, id: string }) {
+export async function _verify(captcha: ICaptcha) {
   return await api({
     method: "POST",
     url: "auth/verify",

@@ -93,8 +93,8 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive, getCurrentInstance, onMounted } from "vue";
-import { _regist, _captcha, _verify } from '../../api/auth/auth';
-import { IEvent, INuser } from "../../typings";
+import { _captcha, _verify } from '../../api/auth/auth';
+import { IEvent, INuser, ICaptcha } from "../../typings";
 
 import  { useEvent, IUse }  from '../../hooks/login/index'
 import { ElMessage } from "element-plus";
@@ -103,19 +103,23 @@ export default defineComponent({
   name: 'registForm',
   components: {},
   setup() {
-    const { ctx }  = getCurrentInstance()
+
+    // 获取当前组件的实例(相当于this)
+    const internalInstance = getCurrentInstance()
+
     const { setEvent }: IUse = useEvent()
 
+    // 注册表单值
     const registFormData: INuser = reactive({
       phone: "",
       password: "",
       repassword: "",
       isAgree: false, // 是否同意协议
       captcha: "", // 验证码
-      captchas: '' // 后端返回的验证码
+      captchas: "" // 后端返回的验证码
     })
 
-    let isLoading: boolean = ref(false)
+    let isLoading = ref(false)
     /**
      * @description: 自定义校验方法
      * @param {*} rule
@@ -159,7 +163,7 @@ export default defineComponent({
       ]
     })
 
-    const dialogTableVisible: string = ref(false)
+    const dialogTableVisible = ref(false)
 
     /**
      * @description: 发送注册请求的方法
@@ -167,34 +171,22 @@ export default defineComponent({
      * @return {*}
      */
     async function sedRegist() {
-      if (registFormData.password !== registFormData.repassword) {
-        ElMessage.warning({
-          message: '两次密码输入不相同',
-          type: 'warning'
-        })
-      }
       // 开启loading...
       // ctx.isLoading = true
-      const captcha = {
+      const captcha: ICaptcha = {
         captcha: registFormData.captcha,
         id: registFormData.captchas.id
       }
-      await _verify(captcha).then(async res => {
+      await _verify(captcha).then( res => {
         if (res.code === 0) {
-          await _regist({
-            phone: registFormData.phone,
-            password: registFormData.password
-          }).then(res => {
-            if (res.code === 0) {
-              ElMessage.success({
-                message: res.msg,
-                type: 'success',
-              })
-              // 关闭Loading...
-              // ctx.isLoading = false
-              setEvent('login')
-            }
-          })
+          sessionStorage.setItem(
+            "regist",
+            JSON.stringify({
+              phone: registFormData.phone,
+              password: registFormData.password
+            })
+          )
+          setEvent("message")
         } else {
           getNewCaptcha()
         }
@@ -203,9 +195,16 @@ export default defineComponent({
 
     // 注册方法
     function regist() {
-      ctx.$refs['registForm'].validate((valid) => {
+      internalInstance.ctx.$refs['registForm'].validate((valid: boolean) => {
         if (valid) {
-          sedRegist()
+          if (registFormData.password !== registFormData.repassword) {
+            ElMessage.warning({
+              message: '两次密码输入不相同',
+              type: 'warning'
+            })
+          } else {
+            sedRegist()
+          }
         } else {
           return false;
         }

@@ -122,16 +122,16 @@ export default defineComponent({
     // 用户协议
     const dialogTableVisible = ref(false)
 
-    const { ctx } = getCurrentInstance()
+    const internalInstance  = getCurrentInstance()
     // 登录方法
     function login() {
-      ctx.$refs['login-form'].validate(async(value) => {
+      internalInstance.ctx.$refs['login-form'].validate(async(value: boolean) => {
         if (value) {
           const result:any = await _login({
             phone: userData.phone,
             password: userData.password
           })
-          console.log(result)
+          console.log(result) // 输出用户token
           if(result.token) {
             localStorage.setItem('token', result.token)
           }

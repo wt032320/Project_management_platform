@@ -2,15 +2,17 @@ interface IEvent {
   event: string;
 }
 
+// 用户注册数据接口
 interface INuser {
   phone: string;
   password: string;
   repassword: string;
   isAgree: boolean;
   captcha: string;
-  captchas: object;
+  captchas: any;
 }
 
+// 用户登录数据接口
 interface IUser {
   phone: string;
   password: string;
@@ -21,9 +23,16 @@ interface IState {
   list: IEvent[];
 }
 
+// 校验验证码数据接口
+interface ICaptcha {
+  captcha: string; 
+  id: string;
+}
+
 export  {
   IEvent,
   IUser,
   INuser,
   IState,
+  ICaptcha
 }
