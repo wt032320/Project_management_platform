@@ -1,13 +1,19 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import component from '../shims-vue';
 
 // 路由懒加载
 const Auth = () => import('../views/Auth.vue')
+const Project = () => import('../views/Project.vue')
 
 const routes = [
   { 
     path: '/', 
     component: Auth
   },
+  {
+    path: '/project',
+    component: Project
+  }
 ]
 
 const router = createRouter({

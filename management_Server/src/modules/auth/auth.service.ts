@@ -9,8 +9,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { User } from 'src/entities/user.entity';
 import { UsersService } from '../users/users.service';
-import { IResponse } from '../interface/response.interface';
-import { encript } from '../utils/encription';
+import { IResponse } from '../../interface/response.interface';
+import { encript } from '../../utils/encription';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';

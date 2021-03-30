@@ -10,8 +10,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RedisService } from 'nestjs-redis';
 import { Repository } from 'typeorm';
-import { User } from '../entities/user.entity';
-import { IResponse } from '../interface/response.interface';
+import { User } from '../../entities/user.entity';
+import { IResponse } from '../../interface/response.interface';
 import * as Redis from 'ioredis';
 
 @Injectable()

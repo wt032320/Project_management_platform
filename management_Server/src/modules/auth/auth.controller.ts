@@ -1,13 +1,12 @@
 /*
  * @Author: your name
  * @Date: 2021-03-21 09:58:12
- * @LastEditTime: 2021-03-27 21:31:19
+ * @LastEditTime: 2021-03-30 19:56:07
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \project\final\src\auth\auth.controller.ts
  */
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from 'src/entities/user.entity';
 import { AuthService } from './auth.service';
@@ -43,12 +42,11 @@ export class AuthController {
     return await this.authService.alter(userDto)
   }
 
-  @Get('sss')
-  @UseGuards(AuthGuard('jwt'))
-  @ApiBearerAuth('jwt')
-  dd() {
-    return 'ejeeee'
-  }
+  // @Get('sss')
+  // @ApiBearerAuth('jwt')
+  // dd() {
+  //   return 'ejeeee'
+  // }
 
   @Get('captcha/:id')
   @ApiOperation({
