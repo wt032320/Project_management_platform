@@ -31,14 +31,15 @@
 
 <script lang="ts">
 import { defineComponent, computed, reactive, toRefs } from "vue";
-import LoginForm from "../components/login/LoginForm.vue";
-import RegistForm from "../components/login/RegistForm.vue";
-import AlterForm from "../components/login/AlterForm.vue";
-import MessageForm from "../components/login/MessageForm.vue";
+import LoginForm from "../components/auth/LoginForm.vue";
+import RegistForm from "../components/auth/RegistForm.vue";
+import AlterForm from "../components/auth/AlterForm.vue";
+import MessageForm from "../components/auth/MessageForm.vue";
 
 import { watch } from "vue";
 import { Store, useStore } from 'vuex';
 import { IEvent } from "../typings";
+
 
 export default defineComponent({
   name: 'Auth',
