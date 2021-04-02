@@ -2,7 +2,7 @@
   <header>
     <div class="header-logo">
       <img src="../../assets/logo.png" >
-      <span>校园智慧化管理管理平台</span>
+      <span>xxx项目管理平台</span>
     </div>
     <div class="header-messages">
       <div class="head-message" v-for="(item, index) in messages" :key="index">
@@ -32,6 +32,7 @@ export default defineComponent({
   header {
     display: flex;
     justify-content: space-between; // 两端对齐，项目之间的间隔都相等
+    align-items: center;
     width: 110%;
     position: relative;
     right: 5%;
@@ -46,7 +47,7 @@ export default defineComponent({
       }
       span {
         margin-left: 1rem;
-        font-size: 14px;
+        font-size: 0.9rem;
       }
     }
     .header-messages {
@@ -56,6 +57,8 @@ export default defineComponent({
       margin-right: 5%;
       .head-message {
         padding-right: 0.5rem;
+        font-size: 0.8rem;
+        text-shadow: 0 1px 1px rgba($color: gray, $alpha: 0.5);
       }
     }
   }

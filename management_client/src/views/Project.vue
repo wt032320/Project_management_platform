@@ -1,8 +1,10 @@
 <template>
-  <div>
-    <project-header></project-header>
-    <project-side></project-side>
-    <project-main></project-main>
+  <div class="project">
+    <project-header class="header"></project-header>
+    <div class="project-area">
+      <project-side></project-side>
+      <project-main></project-main>
+    </div>
   </div>
 </template>
 
@@ -26,5 +28,18 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.project {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  .header {
+    height: 5%;
+  }
+  .project-area {
+    height: 95%;
+    background-color: rgba(241, 242, 243, $alpha: 1);
+    display: flex;
+  }
+}
 
 </style>
