@@ -10,12 +10,29 @@ export class Project {
   })
   id: string;
 
+  @Column({nullable: true})
+  date?: string;
+
   @Column()
   @ApiProperty({
     description: '项目名称',
-    example: '项目简介',
+    example: '实验小学改造',
   })
   name: string;
+
+  @Column()
+  @ApiProperty({
+    description: '项目地址',
+    example: 'xx路1号',
+  })
+  address: string;
+
+  @Column()
+  @ApiProperty({
+    description: '项目阶段',
+    example: '正在施工中',
+  })
+  stage: string;
 
   @Column("text")
   @ApiProperty({
@@ -26,9 +43,8 @@ export class Project {
 
   @Column()
   @ApiProperty({
-    description: '项目创建者',
-    example: '王老五',
+    description: '项目创建者Id',
+    example: 'aa',
   })
-  creator: string;
-
+  creatorId: string;
 }

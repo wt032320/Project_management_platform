@@ -10,6 +10,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JWT_CONSTANT } from './jwt.constant';
 import { JwtStrategy } from './jwt.strategy';
 import { UsersService } from '../users/users.service';
+import { AddUseridMiddleware } from '../../middlewares/add-userid.middleware';
 
 @Module({
   imports: [
@@ -33,5 +34,6 @@ export class AuthModule implements NestModule {
     // .forRouters('auth/regist) 为只在@Controller('auth/regist')中使用中间件进行密码加密
     consumer.apply(HashPasswordMiddleware).forRoutes('auth/regist')
       .apply(HashPasswordMiddleware).forRoutes('auth/alter')
+      .apply(AddUseridMiddleware).forRoutes('auth/regist')
   }
 }

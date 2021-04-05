@@ -2,7 +2,8 @@
   <div class="side">
     <div class="side-items">
       <div class="side-item" v-for="(item, index) in items" :key="index">
-      {{item}}
+        <span :class="`${item.icon}`" class="iconfont"></span>
+        {{item.title}}
       </div>
     </div>
   </div>
@@ -15,7 +16,28 @@ export default defineComponent({
   name: 'ProjectSide',
   components: {},
   setup() {
-    const items = ref(["项目", "好友", "社区", "个人", "系统"])
+    const items = ref([
+      {
+        title: '项目',
+        icon: 'icon-jia'
+      },
+      {
+        title: '好友',
+        icon: 'icon-haoyou'
+      },
+      {
+        title: '社区',
+        icon: 'icon-shequ'
+      },
+      {
+        title: '个人',
+        icon: 'icon-geren'
+      },
+      {
+        title: '系统',
+        icon: 'icon-xitong'
+      }
+    ])
 
     return {
       items

@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Project } from '../../entities/project.entity';
 import { Repository } from 'typeorm';
 import { IResponse } from '../../interface/response.interface';
+import { IProject } from 'src/interface/project.interface';
+import { UsersService } from '../users/users.service';
 
 const logger = new Logger("project.service")
 
@@ -13,7 +15,8 @@ export class ProjectService {
 
   constructor(
     @InjectRepository(Project)
-    private projectsRepository: Repository<Project>
+    private projectsRepository: Repository<Project>,
+    private readonly userService: UsersService
   ) { }
 
   /**
@@ -24,6 +27,7 @@ export class ProjectService {
   public async createProject(project: Project) {
     try {
       const data = await this.projectsRepository.save(project)
+      this.userService.addUserProject(data.id, data.creatorId)
       this.response = {
         code: 0,
         msg: '项目保存成功',
@@ -33,7 +37,7 @@ export class ProjectService {
       logger.warn("创建项目失败")
       this.response = {
         code: 1,
-        msg: '项目创建失败'
+        msg: error
       }
     }
     return this.response
@@ -112,6 +116,11 @@ export class ProjectService {
       })
   }
 
+  /**
+   * @description: 通过id获取项目
+   * @param {string} projectId
+   * @return {*}
+   */
   public async findProjectById(projectId: string) {
     try {
       const _project = await this.projectsRepository.findOne(projectId)
@@ -123,6 +132,27 @@ export class ProjectService {
       this.response = {
         code: 7,
         msg: '查询项目失败'
+      }
+    }
+    return this.response
+  }
+
+  /**
+   * @description: 获取当前用户所有项目
+   * @param {*}
+   * @return {*}
+   */
+  public async getProjects() {
+    try {
+      const _project = await this.projectsRepository.find()
+      this.response = {
+        code: 0,
+        msg: _project
+      }
+    } catch (error) {
+      this.response = {
+        code: 7,
+        msg: '项目查询失败'
       }
     }
     return this.response

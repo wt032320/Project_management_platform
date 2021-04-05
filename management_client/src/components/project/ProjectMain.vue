@@ -17,20 +17,27 @@
       <el-table
         :data="tableData"
         style="width: 100%"
+        height="90%"
+        class="form"
       >
-        <el-table-column
-          prop="date"
-          label="日期"
-          width="180">
+        <el-table-column 
+          v-for="item in tableArgs" 
+          :key="item" 
+          :prop="item.prop"
+          :label="item.label"
+          align="center"
+        >
         </el-table-column>
         <el-table-column
-          prop="name"
-          label="姓名"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="address"
-          label="地址">
+          fixed="right"
+          label="操作"
+          align="center"
+        >
+          <template #default="scope">
+            <el-button @click="handleClick(scope.row)" type="text" size="small">进入</el-button>
+            <el-button type="text" size="small">编辑</el-button>
+            <el-button type="text" size="small">删除</el-button>
+          </template>
         </el-table-column>
       </el-table>
     </div>
@@ -45,28 +52,27 @@ export default defineComponent({
   components: {},
   setup() {
     const searchValue = ref("")
+    // 表单数据
     const tableData = ref([
       {
         date: '2016-05-02',
-        name: '黄小博',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '李小耿',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
+        name: '实验中学改造',
+        address: 'xx路一号',
+        stage: '正在施工中',
+        identity: '甲方'
       }
+    ])
+    const tableArgs = ref([
+      { prop: 'date', label: '创建日期' },
+      { prop: 'name', label: '名称' },
+      { prop: 'address', label: '地址' },
+      { prop: 'stage', label: '阶段' },
+      { prop: 'identity', label: '身份' }
     ])
     return {
       searchValue,
-      tableData
+      tableData,
+      tableArgs
     }
   }
 })
@@ -95,6 +101,13 @@ export default defineComponent({
         padding: 0 0.4rem;
       }
     }
+  }
+  .main-form {
+    width: 95%;
+    height: 90%;
+    margin-top: 1rem;
+    margin-left: 2.5%;
+    border-radius: 0.8rem;
   }
 }
 </style>

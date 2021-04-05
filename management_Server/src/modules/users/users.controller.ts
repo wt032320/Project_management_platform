@@ -11,9 +11,4 @@ import { Role } from '../roles/role.decorator';
 export class UsersController {
   constructor(private usersService: UsersService) {}
   
-  @Get('hello')
-  @Role('admin')
-  hello() {
-    return this.usersService.hello()
-  }
 }

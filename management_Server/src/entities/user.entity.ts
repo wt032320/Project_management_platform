@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-16 17:06:25
- * @LastEditTime: 2021-03-30 16:05:22
+ * @LastEditTime: 2021-04-05 20:10:13
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \project\final\src\entities\user.entity.ts
@@ -26,6 +26,12 @@ export class User {
   })
   password: string;
 
+  @Column({nullable: true})
+  projectIds?: string;
+
   @Column()
   salt?: string;
+
+  @Column()
+  id?: string;
 }

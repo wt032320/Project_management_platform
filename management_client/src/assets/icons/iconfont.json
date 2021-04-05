@@ -1,0 +1,44 @@
+{
+  "id": "2465444",
+  "name": "management_client",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "20322478",
+      "name": "好友",
+      "font_class": "haoyou",
+      "unicode": "e653",
+      "unicode_decimal": 58963
+    },
+    {
+      "icon_id": "17770918",
+      "name": "个人",
+      "font_class": "geren",
+      "unicode": "e7c2",
+      "unicode_decimal": 59330
+    },
+    {
+      "icon_id": "12251122",
+      "name": "社区",
+      "font_class": "shequ",
+      "unicode": "e672",
+      "unicode_decimal": 58994
+    },
+    {
+      "icon_id": "16721154",
+      "name": "系统",
+      "font_class": "xitong",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "17667583",
+      "name": "文件_夹",
+      "font_class": "jia",
+      "unicode": "e841",
+      "unicode_decimal": 59457
+    }
+  ]
+}

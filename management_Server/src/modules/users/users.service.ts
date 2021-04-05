@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-16 18:53:38
- * @LastEditTime: 2021-03-22 20:04:07
+ * @LastEditTime: 2021-04-05 21:37:12
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \project\final\src\users\users.service.ts
@@ -41,11 +41,19 @@ export class UsersService {
     return await this.usersRepository.findOne(phone)
   }
 
-  public async hello() {
-    // return await this.redis.set("management", "hello world")
-    return {
-      code: 0,
-      msg: 'hello world!'
-    }
+  /**
+   * @description: 通过userid 获取用户
+   * @param {string} id
+   * @return {*}
+   */
+  public async findOneById(id: string) {
+    return await this.usersRepository.findOne(id)
   }
+
+  public async addUserProject(projectId: string, userid: string) {
+    const user =  await this.findOneById(userid)
+    Logger.log(user.projectIds)
+    // user.projectIds + projectId + ''
+    // await this.usersRepository.save(user)
+  } 
 }
