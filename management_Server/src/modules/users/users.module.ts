@@ -7,10 +7,14 @@ import { User } from '../../entities/user.entity';
 import { HashPasswordMiddleware } from '../../middlewares/hash-password.middleware';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from '../../guards/auth.guard';
+import { ProjectService } from '../project/project.service';
+import { Project } from 'src/entities/project.entity';
 
 @Module({
   // 该模块使用该forFeature()方法定义在当前作用域中注册了哪些存储库
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [
+    TypeOrmModule.forFeature([User]),
+  ],
   providers: [
     UsersService,
     {

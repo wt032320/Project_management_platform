@@ -5,6 +5,12 @@ interface IProject {
   creator: string; // 项目创建者
 }
 
+interface IUserProject {
+  projectId: string; // 项目id
+  identity: string; // 用户身份
+}
+
 export {
-  IProject
+  IProject,
+  IUserProject
 }

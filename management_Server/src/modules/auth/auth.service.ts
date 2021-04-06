@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-21 09:57:12
- * @LastEditTime: 2021-03-28 19:15:41
+ * @LastEditTime: 2021-04-06 20:11:29
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \project\final\src\auth\auth.service.ts
@@ -82,9 +82,13 @@ export class AuthService {
           this.response = res;
           throw this.response
         }
+        const use = await this.usersRepository.findOne(user.phone)
         this.response = {
           code: 0,
-          msg: { token: await this.createToken(user) }
+          msg: { 
+            token: await this.createToken(user),
+            userid: use.id
+          }
         }
         return this.response
       })

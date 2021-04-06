@@ -44,7 +44,10 @@ export class Project {
   @Column()
   @ApiProperty({
     description: '项目创建者Id',
-    example: 'aa',
+    example: '15',
   })
   creatorId: string;
+
+  @Column()
+  identity?: string;
 }

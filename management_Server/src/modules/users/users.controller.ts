@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, SetMetadata, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, SetMetadata, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { User } from '../../entities/user.entity';
@@ -11,4 +11,11 @@ import { Role } from '../roles/role.decorator';
 export class UsersController {
   constructor(private usersService: UsersService) {}
   
+  @Get('find/:id')
+  @ApiOperation({
+    summary: "findById"
+  })
+  public find(@Param("id") creatorid: string) {
+    return this.usersService.findOneById(creatorid)
+  }
 }

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-16 18:53:38
- * @LastEditTime: 2021-04-05 21:37:12
+ * @LastEditTime: 2021-04-06 15:27:29
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \project\final\src\users\users.service.ts
@@ -13,6 +13,7 @@ import { Repository } from 'typeorm';
 import { User } from '../../entities/user.entity';
 import { IResponse } from '../../interface/response.interface';
 import * as Redis from 'ioredis';
+import { IUserProject } from 'src/interface/project.interface';
 
 @Injectable()
 export class UsersService {
@@ -43,17 +44,36 @@ export class UsersService {
 
   /**
    * @description: 通过userid 获取用户
-   * @param {string} id
+   * @param {string} userid
    * @return {*}
    */
-  public async findOneById(id: string) {
-    return await this.usersRepository.findOne(id)
+  public async findOneById(userid: string) {
+    return await this.usersRepository.findOne({ id: userid })
+    // try {
+    //   const _user = await this.usersRepository.findOne({id: userid})
+    //   this.response = {
+    //     code: 0,
+    //     msg: _user
+    //   }
+    // } catch (error) {
+    //   this.response = {
+    //     code: 7,
+    //     msg: error
+    //   }
+    // }
+    // return this.response
   }
 
   public async addUserProject(projectId: string, userid: string) {
-    const user =  await this.findOneById(userid)
-    Logger.log(user.projectIds)
-    // user.projectIds + projectId + ''
-    // await this.usersRepository.save(user)
+    
+    const user = await this.findOneById(userid)
+    const userProject: IUserProject = {
+      projectId,
+      identity: "项目经理"
+    }
+    const str = JSON.stringify(userProject)
+    const news  = user.projects.concat(`${str} `)
+    user.projects = news
+    await this.usersRepository.save(user)
   } 
 }

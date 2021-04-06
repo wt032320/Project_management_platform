@@ -75,6 +75,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive, getCurrentInstance } from "vue";
+import router from '../../router/index'
 import { _login } from '../../api/auth/auth';
 import { IUser, IEvent } from "../../typings";
 
@@ -131,10 +132,11 @@ export default defineComponent({
             phone: userData.phone,
             password: userData.password
           })
-          console.log(result) // 输出用户token
-          if(result.token) {
-            localStorage.setItem('token', result.token)
+          if(result) {
+            localStorage.setItem('token', result.msg.token)
+            localStorage.setItem('userid', result.msg.userid)
           }
+          router.push('/project')
         } else {
           return false
         }

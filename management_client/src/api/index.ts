@@ -16,6 +16,7 @@ const api = axios.create({
 // 请求拦截
 api.interceptors.request.use((req: AxiosRequestConfig) => {
   const token: string = localStorage.getItem('token') as string;
+  req.headers['Authorization'] = `Bearer ${token}`
   return req;
 }, err => console.log(err))
 

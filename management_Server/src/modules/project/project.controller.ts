@@ -6,8 +6,8 @@ import { AuthGuard } from '@nestjs/passport';
 
 @Controller('project')
 @ApiTags("用户项目模块")
-// @UseGuards(AuthGuard('jwt')) // 使用jwt进行权限守卫
-// @ApiBearerAuth('jwt')
+@UseGuards(AuthGuard('jwt')) // 使用jwt进行权限守卫
+@ApiBearerAuth('jwt')
 export class ProjectController {
   constructor(
     private readonly projectService: ProjectService
@@ -45,11 +45,11 @@ export class ProjectController {
     return this.projectService.findProjectById(projectId)
   }
 
-  @Get("projects")
+  @Get("projects/:id/:page")
   @ApiOperation({
-    summary: "获取所有项目"
+    summary: "用户通过id获取所有项目"
   })
-  public getAllProject() {
-    return this.projectService.getProjects()
+  public getAllProject(@Param("id") userid: string, @Param("page") page: number) {
+    return this.projectService.getProjectsByUser(userid, page)
   }
 }

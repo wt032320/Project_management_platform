@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-16 17:06:25
- * @LastEditTime: 2021-04-05 20:10:13
+ * @LastEditTime: 2021-04-06 15:31:14
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \project\final\src\entities\user.entity.ts
@@ -27,7 +27,7 @@ export class User {
   password: string;
 
   @Column({nullable: true})
-  projectIds?: string;
+  projects?: string;
 
   @Column()
   salt?: string;

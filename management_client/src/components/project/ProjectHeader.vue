@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <header class="project-header">
     <div class="header-logo">
       <img src="../../assets/logo.png" >
       <span>xxx项目管理平台</span>
@@ -28,8 +28,8 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-  header {
+<style lang="scss" scoped>
+  .project-header {
     display: flex;
     justify-content: space-between; // 两端对齐，项目之间的间隔都相等
     align-items: center;

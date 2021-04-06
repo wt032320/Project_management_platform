@@ -45,7 +45,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
+import{ _project } from '../../api/project/project'
 
 export default defineComponent({
   name: 'ProjectMain',
@@ -53,7 +54,7 @@ export default defineComponent({
   setup() {
     const searchValue = ref("")
     // 表单数据
-    const tableData = ref([
+    let tableData = ref([
       {
         date: '2016-05-02',
         name: '实验中学改造',
@@ -69,16 +70,23 @@ export default defineComponent({
       { prop: 'stage', label: '阶段' },
       { prop: 'identity', label: '身份' }
     ])
+
+    onMounted(() => {
+      _project().then(res => {
+        tableData = res.msg.ownProjects
+      }) 
+    })
+
     return {
       searchValue,
       tableData,
       tableArgs
     }
-  }
+  },
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .main {
   width: 87%;
   .main-title {
