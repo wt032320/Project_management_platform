@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { IResponse } from '../../interface/response.interface';
 import { IProject } from 'src/interface/project.interface';
 import { UsersService } from '../users/users.service';
+import { getNowDate } from '../../utils/getdate';
 
 const logger = new Logger("project.service")
 
@@ -12,7 +13,7 @@ const logger = new Logger("project.service")
 export class ProjectService {
 
   private response: IResponse
-  private pageSize: number = 8
+  private pageSize: number = 7
   constructor(
     @InjectRepository(Project)
     private projectsRepository: Repository<Project>,
@@ -27,6 +28,8 @@ export class ProjectService {
   public async createProject(project: Project) {
     try {
       const data = await this.projectsRepository.save(project)
+      data.date = getNowDate()
+      await this.projectsRepository.save(project)
       this.userService.addUserProject(data.id, data.creatorId)
       this.response = {
         code: 0,
@@ -148,7 +151,7 @@ export class ProjectService {
     let pageNums: number; // 项目页数
     try {
       const user = await this.userService.findOneById(userid)
-      const projects = user.projects.trimEnd().split(' ')
+      const projects = user.projects.trim().split(' ')
       const allproject = projects.map(v => JSON.parse(v))
       const projectIds = allproject.map(v => {
         identities[v.projectId] = v.identity
@@ -161,7 +164,7 @@ export class ProjectService {
         { 
           order: {id: "ASC"}, // 选择排序 id升序
           skip: page ? (page - 1) * this.pageSize : 0, // 偏移(分页) 
-          take: 8 // limit (分页) - 得到的最大实体数。
+          take: 7 // limit (分页) - 得到的最大实体数。
         })
     } catch (error) {
       this.response = {

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-16 18:53:38
- * @LastEditTime: 2021-04-06 15:27:29
+ * @LastEditTime: 2021-04-07 19:41:02
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \project\final\src\users\users.service.ts
@@ -72,8 +72,14 @@ export class UsersService {
       identity: "项目经理"
     }
     const str = JSON.stringify(userProject)
-    const news  = user.projects.concat(`${str} `)
-    user.projects = news
-    await this.usersRepository.save(user)
+    if (user.projects === null ) {
+      const news = `${str} `
+      user.projects = news
+      await this.usersRepository.save(user)
+    } else {
+      const news = user.projects.concat(`${str} `)
+      user.projects = news
+      await this.usersRepository.save(user)
+    }
   } 
 }

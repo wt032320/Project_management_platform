@@ -16,6 +16,7 @@
     <div class="main-form">
       <el-table
         :data="tableData"
+        stripe
         style="width: 100%"
         height="90%"
         class="form"
@@ -40,29 +41,40 @@
           </template>
         </el-table-column>
       </el-table>
+
+      <!-- 分页 -->
+      <el-pagination
+        class="page"
+        background
+        layout="prev, pager, next"
+        :page-size="7"
+        :pager-count="5"
+        :page-count="pageCount.pagenumber"
+        @current-change="pageChage"
+      >
+      </el-pagination>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from "vue";
+import { defineComponent, ref, onMounted, reactive, toRefs } from "vue";
 import{ _project } from '../../api/project/project'
+import { resolve } from "dns";
 
 export default defineComponent({
   name: 'ProjectMain',
   components: {},
   setup() {
     const searchValue = ref("")
+
+    const pageCount = reactive({
+      pagenumber:  null // 页数
+    })
+
     // 表单数据
-    let tableData = ref([
-      {
-        date: '2016-05-02',
-        name: '实验中学改造',
-        address: 'xx路一号',
-        stage: '正在施工中',
-        identity: '甲方'
-      }
-    ])
+    let tableData = ref([])
+
     const tableArgs = ref([
       { prop: 'date', label: '创建日期' },
       { prop: 'name', label: '名称' },
@@ -71,18 +83,35 @@ export default defineComponent({
       { prop: 'identity', label: '身份' }
     ])
 
+    // 获取表单数据
+    async function getTableData(page: number = 1) {
+      await _project(page).then(res => {
+        // 改变 tableData的值时 要加上.value属性
+        tableData.value = res.msg.ownProjects
+        pageCount.pagenumber = res.msg.pageNums
+      })
+    }
     onMounted(() => {
-      _project().then(res => {
-        tableData = res.msg.ownProjects
-      }) 
+      getTableData()
     })
+
+    /**
+     * @description: 翻页
+     * @param {*}
+     * @return {*}
+     */
+    function pageChage(page: number) {
+      getTableData(page)
+    }
 
     return {
       searchValue,
       tableData,
-      tableArgs
+      pageCount,
+      tableArgs,
+      pageChage
     }
-  },
+  }
 })
 </script>
 
@@ -112,10 +141,16 @@ export default defineComponent({
   }
   .main-form {
     width: 95%;
-    height: 90%;
+    height: 85%;
     margin-top: 1rem;
     margin-left: 2.5%;
     border-radius: 0.8rem;
+  }
+  .page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
   }
 }
 </style>
