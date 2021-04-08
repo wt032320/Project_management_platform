@@ -1,10 +1,10 @@
 <template>
   <header class="project-header">
-    <div class="header-logo">
+    <div class="header-logo header">
       <img src="../../assets/logo.png" >
       <span>xxx项目管理平台</span>
     </div>
-    <div class="header-messages">
+    <div class="header-messages header">
       <div class="head-message" v-for="(item, index) in messages" :key="index">
         <span>{{item}}</span>
       </div>
@@ -16,7 +16,7 @@
 import { defineComponent, reactive, ref } from 'vue';
 
 export default defineComponent({
-  name: 'ProjectHeader',
+  name: 'HomeHeader',
   components: {},
   setup() {
     const messages = ref(["我的", "消息", "设置"])
@@ -28,7 +28,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
   .project-header {
     display: flex;
     justify-content: space-between; // 两端对齐，项目之间的间隔都相等
@@ -60,6 +60,21 @@ export default defineComponent({
         font-size: 0.8rem;
         text-shadow: 0 1px 1px rgba($color: gray, $alpha: 0.5);
       }
+    }
+
+    .header {
+      animation: init2 0.5s;
+    }
+  }
+
+  @keyframes init2 {
+    from {
+      position: relative;
+      bottom: 5rem;
+    }
+    to {
+      position: relative;
+      bottom: 0rem;
     }
   }
 </style>

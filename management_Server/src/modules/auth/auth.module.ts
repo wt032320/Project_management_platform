@@ -18,7 +18,7 @@ import { AddUseridMiddleware } from '../../middlewares/add-userid.middleware';
     TypeOrmModule.forFeature([User]),
     JwtModule.register({
       secret: JWT_CONSTANT.secret,
-      signOptions: { expiresIn: '6000s' },
+      signOptions: { expiresIn: '60000s' },
     })
   ],
   providers: [

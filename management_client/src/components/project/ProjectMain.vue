@@ -60,7 +60,6 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted, reactive, toRefs } from "vue";
 import{ _project } from '../../api/project/project'
-import { resolve } from "dns";
 
 export default defineComponent({
   name: 'ProjectMain',

@@ -3,7 +3,12 @@ import component from '../shims-vue';
 
 // 路由懒加载
 const Auth = () => import('../views/Auth.vue')
-const Project = () => import('../views/Project.vue')
+const Home = () => import('../views/Home.vue')
+const ProjectMain = () => import('../components/project/ProjectMain.vue')
+const System = () => import('../components/system/System.vue')
+const Friend = () => import('../components/friend/Friend.vue')
+const Profile = () => import('../components/profile/Profile.vue')
+const Community = () => import('../components/community/Community.vue')
 
 const routes = [
   { 
@@ -12,7 +17,29 @@ const routes = [
   },
   {
     path: '/project',
-    component: Project
+    component: Home,
+    children: [
+      {
+        path: '',
+        component: ProjectMain
+      },
+      {
+        path: 'friend',
+        component: Friend
+      },
+      {
+        path: 'community',
+        component: Community
+      },
+      {
+        path: 'profile',
+        component: Profile
+      },
+      {
+        path: 'system',
+        component: System
+      }
+    ]
   }
 ]
 
