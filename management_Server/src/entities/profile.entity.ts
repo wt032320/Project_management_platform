@@ -17,5 +17,20 @@ export class Profile {
   })
   company: string;
 
-  
+  @Column()
+  id?: string;
+
+  @Column()
+  @ApiProperty({
+    description: '个性签名',
+    example: '等风也等你'
+  })
+  sign: string; // 个性签名
+
+  @Column()
+  @ApiProperty({
+    description: '地区',
+    example: '陕西,西安'
+  })
+  area: string; // 地区
 }

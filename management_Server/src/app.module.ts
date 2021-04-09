@@ -10,7 +10,7 @@ import { RedisModule, RedisModuleOptions } from 'nestjs-redis';
 import { ProjectModule } from './modules/project/project.module';
 import { Project } from './entities/project.entity';
 import { ProfileModule } from './modules/profile/profile.module';
-import { Profile } from './entities/profie.entity';
+import { Profile } from './entities/profile.entity';
 
 
 const options: RedisModuleOptions = {

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-21 09:57:12
- * @LastEditTime: 2021-04-06 20:11:29
+ * @LastEditTime: 2021-04-09 22:29:50
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \project\final\src\auth\auth.service.ts
@@ -14,6 +14,8 @@ import { encript } from '../../utils/encription';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
+import { Profile } from '../../entities/profile.entity';
+import { ProfileService } from '../profile/profile.service';
 
 const logger = new Logger('auth.service')
 const svgCaptcha = require('svg-captcha');
@@ -27,6 +29,7 @@ export class AuthService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     private readonly usersService: UsersService,
+    private readonly profileService: ProfileService,
     private readonly jwtService: JwtService
   ) {}
 
@@ -131,6 +134,7 @@ export class AuthService {
       })
       .then(async() => {
         try {
+          await this.profileService.addId(user.id)
           await this.usersRepository.save(user);
           this.response = {
             code: 0,

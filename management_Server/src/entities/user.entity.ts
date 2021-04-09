@@ -1,14 +1,15 @@
 /*
  * @Author: your name
  * @Date: 2021-03-16 17:06:25
- * @LastEditTime: 2021-04-06 15:31:14
+ * @LastEditTime: 2021-04-09 22:25:55
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \project\final\src\entities\user.entity.ts
  */
 /* eslint-disable prettier/prettier */
 import { ApiProperty } from '@nestjs/swagger';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
+import { Profile } from './profile.entity';
 
 @Entity()
 export class User {
@@ -34,4 +35,5 @@ export class User {
 
   @Column()
   id?: string;
+
 }
