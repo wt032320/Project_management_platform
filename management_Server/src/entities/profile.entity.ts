@@ -18,7 +18,11 @@ export class Profile {
   company: string;
 
   @Column()
-  id?: string;
+  @ApiProperty({
+    description: '用户id',
+    example: '15'
+  })
+  id: string;
 
   @Column()
   @ApiProperty({

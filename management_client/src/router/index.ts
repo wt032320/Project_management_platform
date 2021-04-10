@@ -9,6 +9,7 @@ const System = () => import('../components/system/System.vue')
 const Friend = () => import('../components/friend/Friend.vue')
 const Profile = () => import('../components/profile/Profile.vue')
 const Community = () => import('../components/community/Community.vue')
+const AddInfo = () => import('../components/profile/AddInfo.vue')
 
 const routes = [
   { 
@@ -38,6 +39,10 @@ const routes = [
       {
         path: 'system',
         component: System
+      },
+      {
+        path: 'prefect',
+        component: AddInfo
       }
     ]
   }

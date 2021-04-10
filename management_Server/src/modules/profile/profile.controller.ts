@@ -18,8 +18,11 @@ export class ProfileController {
     return this.profileService.creatUserInfo(userInfo)
   }
 
-  @Post('test/:id')
-  public add(@Param('id') userid: string) {
-    return this.profileService.addId(userid)
+  @Post("getinfo/:id")
+  @ApiOperation({
+    summary: '获取用户个人信息'
+  })
+  public getuserInfo(@Param('id') userid: string) {
+    return this.profileService.getUserInfo(userid)
   }
 }

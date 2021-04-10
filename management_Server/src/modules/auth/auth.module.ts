@@ -11,15 +11,11 @@ import { JWT_CONSTANT } from './jwt.constant';
 import { JwtStrategy } from './jwt.strategy';
 import { UsersService } from '../users/users.service';
 import { AddUseridMiddleware } from '../../middlewares/add-userid.middleware';
-import { Profile } from '../../entities/profile.entity';
-import { ProfileModule } from '../profile/profile.module';
-import { ProfileService } from '../profile/profile.service';
 
 @Module({
   imports: [
     UsersModule,
-    ProfileModule,
-    TypeOrmModule.forFeature([User, Profile]),
+    TypeOrmModule.forFeature([User]),
     JwtModule.register({
       secret: JWT_CONSTANT.secret,
       signOptions: { expiresIn: '60000s' },
@@ -28,7 +24,6 @@ import { ProfileService } from '../profile/profile.service';
   providers: [
     AuthService,
     UsersService,
-    ProfileService,
     JwtStrategy
   ],
   controllers: [AuthController],

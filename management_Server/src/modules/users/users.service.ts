@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-16 18:53:38
- * @LastEditTime: 2021-04-07 19:41:02
+ * @LastEditTime: 2021-04-10 19:30:57
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \project\final\src\users\users.service.ts
@@ -81,5 +81,5 @@ export class UsersService {
       user.projects = news
       await this.usersRepository.save(user)
     }
-  } 
+  }
 }

@@ -14,8 +14,6 @@ import { encript } from '../../utils/encription';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
-import { Profile } from '../../entities/profile.entity';
-import { ProfileService } from '../profile/profile.service';
 
 const logger = new Logger('auth.service')
 const svgCaptcha = require('svg-captcha');
@@ -29,7 +27,6 @@ export class AuthService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     private readonly usersService: UsersService,
-    private readonly profileService: ProfileService,
     private readonly jwtService: JwtService
   ) {}
 
@@ -134,7 +131,6 @@ export class AuthService {
       })
       .then(async() => {
         try {
-          await this.profileService.addId(user.id)
           await this.usersRepository.save(user);
           this.response = {
             code: 0,

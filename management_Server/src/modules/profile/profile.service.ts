@@ -4,6 +4,7 @@ import { Profile } from '../../entities/profile.entity';
 import { getConnection, Repository } from 'typeorm';
 import { IResponse } from 'src/interface/response.interface'
 
+
 @Injectable()
 export class ProfileService {
 
@@ -35,12 +36,20 @@ export class ProfileService {
     return this.response
   }
 
-  public async addId(userid: string) {
-    return await getConnection()
-      .createQueryBuilder()
-      .update(Profile)
-      .set( {id: userid} )
-      .where("id is null")
-      .execute()
+  public async getUserInfo(userid: string) {
+    try {
+      const _userInfo = await this.profileRepository.findOne({id: userid})
+      console.log(_userInfo)
+      this.response = {
+        code: 0,
+        msg: _userInfo
+      }
+    } catch (error) {
+      this.response = {
+        code: 7,
+        msg: '获取用户个人信息失败' + error 
+      }
+    }
+    return this.response
   }
 }

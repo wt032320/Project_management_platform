@@ -3,26 +3,75 @@
     <div class="head">
       <div class="head-portrait">
       </div>
-      <div class="infomation">
-        <span class="nickname">李小耿</span>
-        <span class="sign">暂未填写</span>
-        <span class="area">未知地区</span>
+      <div class="infomation" >
+        <span class="nickname">{{nickname}}</span>
+        <span class="sign">{{sign}}</span>
+        <span class="area">{{area}}</span>
         <span class="footprint">该用户很神秘, 什么也没有留下</span>
       </div>
       <div class="about">
-        <el-button type="warning" class="focus" size="small">关注</el-button>
-        <el-button type="success" class="message" size="small">消息</el-button>
+        <el-button type="warning" class="focus" size="small">我的关注</el-button>
+        <el-button type="success" class="message" size="small" @click="router.push('/project/prefect')">完善信息</el-button>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, reactive, toRefs, onMounted } from "vue";
+
+import { _profile } from '../../api/profile/profile';
+import router from '../../router/index';
+
+/**
+ * @description: 用户信息接口
+ * @param {*}
+ * @return {*}
+ */
+interface IUserinfo {
+  nickname: string;
+  company: string;
+  sign: string;
+  area: string;
+}
 
 export default defineComponent({
   name: 'Profile',
-  components: {}
+  components: {},
+  setup() {
+    let userInfo: IUserinfo = reactive({
+      nickname: '',
+      company: '',
+      sign: '',
+      area: ''
+    })
+
+    /**
+     * @description: 获取用户信息
+     * @param {*} userid
+     * @return {*}
+     */
+    async function getuserInfo(userid: string) {
+      await _profile(userid).then((res) => {
+        userInfo.nickname = res.msg.nickname
+        userInfo.company = res.msg.company
+        userInfo.sign = res.msg.sign
+        userInfo.area = res.msg.area
+      })
+    }
+
+    onMounted(() => {
+      const id = localStorage.getItem('userid')
+      getuserInfo(id)
+    })
+
+    const userInfos = toRefs(userInfo)
+
+    return {
+      ...userInfos,
+      router
+    }
+  }
 })
 </script>
 
