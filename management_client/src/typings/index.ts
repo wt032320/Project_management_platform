@@ -29,10 +29,19 @@ interface ICaptcha {
   id: string;
 }
 
+// 用户个人信息接口
+interface IUserinfo {
+  nickname: string;
+  company: string;
+  sign?: string;
+  area?: string;
+}
+
 export  {
   IEvent,
   IUser,
   INuser,
   IState,
-  ICaptcha
+  ICaptcha,
+  IUserinfo
 }

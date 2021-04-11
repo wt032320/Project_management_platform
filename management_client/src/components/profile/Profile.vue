@@ -22,18 +22,13 @@ import { defineComponent, reactive, toRefs, onMounted } from "vue";
 
 import { _profile } from '../../api/profile/profile';
 import router from '../../router/index';
+import { IUserinfo } from '../../typings/index'
 
 /**
  * @description: 用户信息接口
  * @param {*}
  * @return {*}
  */
-interface IUserinfo {
-  nickname: string;
-  company: string;
-  sign: string;
-  area: string;
-}
 
 export default defineComponent({
   name: 'Profile',
