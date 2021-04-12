@@ -1,3 +1,4 @@
+
 {
   "name": "management_client",
   "version": "0.0.0",
@@ -12,6 +13,7 @@
     "lib-flexible": "^0.3.2",
     "path": "^0.12.7",
     "vue": "^3.0.5",
+    "vue-cropper": "^0.5.6",
     "vue-router": "4",
     "vuex": "^4.0.0"
   },

@@ -35,6 +35,7 @@ interface IUserinfo {
   company: string;
   sign?: string;
   area?: string;
+  id?: string;
 }
 
 export  {

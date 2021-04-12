@@ -7,11 +7,11 @@
         <span class="nickname">{{nickname}}</span>
         <span class="sign">{{sign}}</span>
         <span class="area">{{area}}</span>
-        <span class="footprint">该用户很神秘, 什么也没有留下</span>
+        <span class="footprint">{{company}}</span>
       </div>
       <div class="about">
         <el-button type="warning" class="focus" size="small">我的关注</el-button>
-        <el-button type="success" class="message" size="small" @click="router.push('/project/prefect')">完善信息</el-button>
+        <el-button type="success" class="message" size="small" @click="router.push('/project/prefect')">更新信息</el-button>
       </div>
     </div>
   </div>
@@ -35,10 +35,10 @@ export default defineComponent({
   components: {},
   setup() {
     let userInfo: IUserinfo = reactive({
-      nickname: '',
-      company: '',
-      sign: '',
-      area: ''
+      nickname: '请设置用户昵称',
+      company: '未知公司',
+      sign: '暂未填写',
+      area: '位置地区'
     })
 
     /**
@@ -48,10 +48,29 @@ export default defineComponent({
      */
     async function getuserInfo(userid: string) {
       await _profile(userid).then((res) => {
-        userInfo.nickname = res.msg.nickname
-        userInfo.company = res.msg.company
-        userInfo.sign = res.msg.sign
-        userInfo.area = res.msg.area
+        if (res.msg === undefined) {
+          return
+        } else if(res.msg.area === '' && res.msg.sign !== '') {
+          userInfo.area = '未知地区'
+          userInfo.nickname = res.msg.nickname
+          userInfo.company = res.msg.company
+          userInfo.sign = res.msg.sign
+        } else if(res.msg.sign === '' && res.msg.area !== '') {
+          userInfo.sign = "暂未填写"
+          userInfo.nickname = res.msg.nickname
+          userInfo.company = res.msg.company
+          userInfo.area = res.msg.area
+        } else if(res.msg.sign === '' && res.msg.area === '') {
+          userInfo.sign = '暂未填写'
+          userInfo.area = '未知地区'
+          userInfo.company = res.msg.company
+          userInfo.nickname = res.msg.nickname
+        } else {
+          userInfo.nickname = res.msg.nickname
+          userInfo.company = res.msg.company
+          userInfo.sign = res.msg.sign
+          userInfo.area = res.msg.area
+        }
       })
     }
 

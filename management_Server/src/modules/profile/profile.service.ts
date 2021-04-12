@@ -16,7 +16,7 @@ export class ProfileService {
   ) { }
 
   /**
-   * @description: 用户完善信息
+   * @description: 用户更新信息
    * @param {Profile} userInfo
    * @return {*}
    */
@@ -25,7 +25,7 @@ export class ProfileService {
       await this.profileRepository.save(userInfo)
       this.response = {
         code: 0,
-        msg: "用户信息保存成功"
+        msg: "用户信息更新成功"
       }
     } catch (error) {
       this.response = {
@@ -36,10 +36,14 @@ export class ProfileService {
     return this.response
   }
 
+  /**
+   * @description: 获取用户信息
+   * @param {string} userid
+   * @return {*}
+   */
   public async getUserInfo(userid: string) {
     try {
       const _userInfo = await this.profileRepository.findOne({id: userid})
-      console.log(_userInfo)
       this.response = {
         code: 0,
         msg: _userInfo

@@ -795,6 +795,11 @@ vite@^2.1.0:
   optionalDependencies:
     fsevents "~2.3.1"
 
+vue-cropper@^0.5.6:
+  version "0.5.6"
+  resolved "https://registry.npm.taobao.org/vue-cropper/download/vue-cropper-0.5.6.tgz?cache=0&sync_timestamp=1608604834259&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fvue-cropper%2Fdownload%2Fvue-cropper-0.5.6.tgz#a38c98d402da1421bd5e7535e16b9723f103cafd"
+  integrity sha1-o4yY1ALaFCG9XnU14WuXI/EDyv0=
+
 vue-router@4:
   version "4.0.5"
   resolved "https://registry.npm.taobao.org/vue-router/download/vue-router-4.0.5.tgz?cache=0&sync_timestamp=1615477530268&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fvue-router%2Fdownload%2Fvue-router-4.0.5.tgz#dd0a4134bc950c37aef64b973e9ee1008428d8fa"

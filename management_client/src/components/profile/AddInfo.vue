@@ -8,12 +8,12 @@
         <el-form :model="userInfo" label-width="100px" class="infomation">
           <el-form-item class="nickname">
             <span>昵称</span>
-            <el-input v-model="userInfo.nickname" placeholder="输入您的昵称" class="input"></el-input>
+            <el-input v-model="userInfo.nickname" placeholder="输入您的昵称(必填)" class="input"></el-input>
           </el-form-item>
 
           <el-form-item class="company">
             <span>公司</span>
-            <el-input v-model="userInfo.company" placeholder="输入您的公司" class="input"></el-input>
+            <el-input v-model="userInfo.company" placeholder="输入您的公司(必填)" class="input"></el-input>
           </el-form-item>
 
           <el-form-item class="area">
@@ -27,7 +27,7 @@
           </el-form-item>
 
           <el-form-item>
-            <el-button type="primary" class="button">更新信息</el-button>
+            <el-button type="primary" class="button" @click="updateInfo">更新信息</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -41,14 +41,8 @@
         </div>
 
         <div class="onclick">
-          <span class="el-dropdown-link">
-            <i class="el-icon-edit"></i><span>Edit</span>
-          </span>
-        </div>
-
-        <div class="upload">
-          <i class="el-icon-edit"></i>
-          <input type="file" placeholder="编辑" class="form-input">
+          <label for="image_uploads" class="upload"><i class="el-icon-edit"></i><span>Edit</span></label>
+          <input type="file" id="image_uploads" name="image_uploads" accept=".jpg, .jpeg, .png" style="opacity: 0">
         </div>
       </div>
     </div>
@@ -56,8 +50,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
+import { defineComponent, reactive, onMounted } from "vue";
 import { IUserinfo } from "../../typings";
+import { _updateInfo, _profile } from "../../api/profile/profile";
+import { ElMessage } from "element-plus";
 
 export default defineComponent({
   name: "AddInfo",
@@ -68,10 +64,57 @@ export default defineComponent({
       company: '',
       area: '',
       sign: '',
+      id: localStorage.getItem('userid')
+    })
+
+    /**
+     * @description: 更新用户信息
+     * @param {*}
+     * @return {*}
+     */
+    async function updateInfo() {
+      await _updateInfo(userInfo)
+        .then(res => {
+          if (res.code === 0) {
+            ElMessage.success({
+              message: res.msg,
+              type: 'success'
+            })
+          } else {
+            ElMessage.warning({
+              message: res.msg,
+              type: 'warning'
+            })
+          }
+        })
+    }
+
+    /**
+     * @description: 获取用户信息
+     * @param {*} userid
+     * @return {*}
+     */
+    async function getuserInfo(userid: string) {
+      await _profile(userid).then((res) => {
+        if (res.msg === undefined) {
+          return
+        } else {
+          userInfo.nickname = res.msg.nickname
+          userInfo.company = res.msg.company
+          userInfo.sign = res.msg.sign
+          userInfo.area = res.msg.area
+        }
+      })
+    }
+
+    onMounted(() => {
+      const id = localStorage.getItem('userid')
+      getuserInfo(id)
     })
 
     return {
-      userInfo
+      userInfo,
+      updateInfo
     }
   }
 })
@@ -149,23 +192,19 @@ export default defineComponent({
           border: 1px solid rgba(gray, $alpha: 0.5);
           border-radius: 0.6rem;
           background-color: #fff;
-          .el-dropdown-link {
-            i {
-              margin: 0.5rem 0.3rem 0.5rem 0.35rem;
-            }
+          .upload {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 550;
+            font-size: 1rem;
+            i,
             span {
-              font-weight: 500;
+              margin-top: 0.4rem;
             }
           }
         }
 
-        .upload {
-          .form-input {
-            -webkit-appearance:none;
-            -moz-appearance: none;
-            border: none;
-          }
-        }
       }
     }
   }
