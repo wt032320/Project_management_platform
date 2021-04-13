@@ -32,33 +32,43 @@
         </el-form>
       </div>
       <div class="right">
+
+        <div class="onclick">
+          <div class="upload" @click="open"><i class="el-icon-edit"></i><span>Edit</span></div>
+        </div>
+
         <div class="profile">
           <span>个人头像</span>
         </div>
 
-        <div class="picture">
-          <img src="" alt="">
+        <div class="cropped-image">
+          <img
+            v-if="cropImg"
+            :src="cropImg"
+            alt="Cropped Image"
+          />
+          <div v-else class="crop-placeholder" />
         </div>
 
-        <div class="onclick">
-          <label for="image_uploads" class="upload"><i class="el-icon-edit"></i><span>Edit</span></label>
-          <input type="file" id="image_uploads" name="image_uploads" accept=".jpg, .jpeg, .png" style="opacity: 0">
-        </div>
+        <image-crop :dialogVisible='dialogVisible' @update:dialogVisible="dialogVisibles"></image-crop>
+
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, onMounted } from "vue";
+import { defineComponent, reactive, onMounted, toRefs, h } from "vue";
 import { IUserinfo } from "../../typings";
 import { _updateInfo, _profile } from "../../api/profile/profile";
 import { ElMessage } from "element-plus";
+import ImageCrop from './ImageCrop.vue'
 
 export default defineComponent({
   name: "AddInfo",
-  components: {},
+  components: { ImageCrop },
   setup() {
+    // 用户信息
     let userInfo: IUserinfo = reactive({
       nickname: '',
       company: '',
@@ -66,6 +76,15 @@ export default defineComponent({
       sign: '',
       id: localStorage.getItem('userid')
     })
+
+    // 头像
+    const data = reactive({
+      cropImg: '',
+      data: null,
+      dialogVisible: false
+    })
+
+    const refData = toRefs(data)
 
     /**
      * @description: 更新用户信息
@@ -107,6 +126,20 @@ export default defineComponent({
       })
     }
 
+    /**
+     * @description:  控制弹窗打开与否
+     * @param {*}
+     * @return {*}
+     */
+    function open () {
+      data.dialogVisible = true
+    }
+
+    // 子组件传过来的弹窗状态
+    function dialogVisibles(v) {
+      data.dialogVisible = v
+    }
+
     onMounted(() => {
       const id = localStorage.getItem('userid')
       getuserInfo(id)
@@ -114,7 +147,10 @@ export default defineComponent({
 
     return {
       userInfo,
-      updateInfo
+      updateInfo,
+      open,
+      dialogVisibles,
+      ...refData
     }
   }
 })
@@ -177,16 +213,9 @@ export default defineComponent({
             font-weight: 600;
           }
         }
-        .picture {
-          width: 13rem;
-          height: 13rem;
-          margin-top: 1rem;
-          background-color: pink;
-          border-radius: 50%;
-        }
         .onclick {
           position: relative;
-          top: -3rem;
+          top: 15rem;
           width: 4rem;
           height: 2rem;
           border: 1px solid rgba(gray, $alpha: 0.5);
@@ -204,7 +233,19 @@ export default defineComponent({
             }
           }
         }
+        .cropped-image {
+          width: 13rem;
+          height: 13rem;
+          margin-top: 1rem;
+          border-radius: 50%;
+        }
 
+        .crop-placeholder {
+          width: 13rem;
+          height: 13rem;
+          border-radius: 50%;
+          background: #ccc;
+        }
       }
     }
   }

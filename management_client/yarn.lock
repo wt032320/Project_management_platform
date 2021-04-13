@@ -236,6 +236,11 @@ core-util-is@~1.0.0:
   resolved "https://registry.npm.taobao.org/core-util-is/download/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
   integrity sha1-tf1UIgqivFq1eqtxQMlAdUUDwac=
 
+cropperjs@^1.5.6:
+  version "1.5.11"
+  resolved "https://registry.npm.taobao.org/cropperjs/download/cropperjs-1.5.11.tgz#502ae6d8ca098b124de6813601cca70015879fc0"
+  integrity sha1-UCrm2MoJixJN5oE2AcynABWHn8A=
+
 cssesc@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npm.taobao.org/cssesc/download/cssesc-3.0.0.tgz#37741919903b868565e1c09ea747445cd18983ee"
@@ -795,10 +800,12 @@ vite@^2.1.0:
   optionalDependencies:
     fsevents "~2.3.1"
 
-vue-cropper@^0.5.6:
-  version "0.5.6"
-  resolved "https://registry.npm.taobao.org/vue-cropper/download/vue-cropper-0.5.6.tgz?cache=0&sync_timestamp=1608604834259&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fvue-cropper%2Fdownload%2Fvue-cropper-0.5.6.tgz#a38c98d402da1421bd5e7535e16b9723f103cafd"
-  integrity sha1-o4yY1ALaFCG9XnU14WuXI/EDyv0=
+vue-cropperjs@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.npm.taobao.org/vue-cropperjs/download/vue-cropperjs-5.0.0.tgz#7f8cbc460737af3831b4ded634c95905198e329e"
+  integrity sha1-f4y8Rgc3rzgxtN7WNMlZBRmOMp4=
+  dependencies:
+    cropperjs "^1.5.6"
 
 vue-router@4:
   version "4.0.5"
