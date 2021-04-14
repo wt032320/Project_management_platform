@@ -9,6 +9,7 @@ export async function _profile(id: string) {
   })
 }
 
+// 更新用户信息接口
 export async function _updateInfo(userInfo: IUserinfo) {
   return await api({
     method: 'POST',

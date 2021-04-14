@@ -50,7 +50,7 @@
           <div v-else class="crop-placeholder" />
         </div>
 
-        <image-crop :dialogVisible='dialogVisible' @update:dialogVisible="dialogVisibles"></image-crop>
+        <image-crop :dialogVisible='dialogVisible'></image-crop>
 
       </div>
     </div>

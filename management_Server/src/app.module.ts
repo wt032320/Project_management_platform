@@ -11,6 +11,8 @@ import { ProjectModule } from './modules/project/project.module';
 import { Project } from './entities/project.entity';
 import { ProfileModule } from './modules/profile/profile.module';
 import { Profile } from './entities/profile.entity';
+import { PhotoModule } from './modules/photo/photo.module';
+import { Photo } from './entities/photo.entity';
 
 
 const options: RedisModuleOptions = {
@@ -29,7 +31,7 @@ const options: RedisModuleOptions = {
       password: 'wt182320..',
       database: 'pmp',
       // 要开始使用该User实体，我们需要通过将其插入到entities模块forRoot()方法选项中的数组中来让TypeORM知道它
-      entities: [User, Project, Profile],
+      entities: [User, Project, Profile, Photo],
       // synchronize: true, // 不应在生产中使用设置,否则可能回丢失生产数据
     }),
     // 加载子模块
@@ -38,7 +40,8 @@ const options: RedisModuleOptions = {
     AuthModule,
     RedisModule.register(options),
     ProjectModule,
-    ProfileModule
+    ProfileModule,
+    PhotoModule
   ],
   controllers: [AppController],
   providers: [AppService],

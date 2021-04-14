@@ -38,11 +38,18 @@ interface IUserinfo {
   id?: string;
 }
 
+// 用户头像信息接口
+interface IPhoto {
+  id: string;
+  photo: string;
+}
+
 export  {
   IEvent,
   IUser,
   INuser,
   IState,
   ICaptcha,
-  IUserinfo
+  IUserinfo,
+  IPhoto
 }
