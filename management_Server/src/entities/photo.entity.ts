@@ -12,7 +12,8 @@ export class Photo {
 
   @Column()
   @ApiProperty({
-    description: '用户头像'
+    description: '用户头像',
+    example: 'jjjjj'
   })
   photo: string;
 }

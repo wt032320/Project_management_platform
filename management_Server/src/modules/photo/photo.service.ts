@@ -24,7 +24,7 @@ export class PhotoService {
     } catch (error) {
       this.response = {
         code: 7,
-        msg: '头像设置失败'
+        msg: error
       }
     }
     return this.response

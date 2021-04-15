@@ -33,24 +33,28 @@
       </div>
       <div class="right">
 
-        <div class="onclick">
-          <div class="upload" @click="open"><i class="el-icon-edit"></i><span>Edit</span></div>
-        </div>
+        <!-- <div class="onclick">
+          <div class="upload" ><i class="el-icon-edit"></i><span>Edit</span></div>
+        </div> -->
 
         <div class="profile">
           <span>个人头像</span>
         </div>
-
+          
         <div class="cropped-image">
-          <img
-            v-if="cropImg"
-            :src="cropImg"
-            alt="Cropped Image"
-          />
-          <div v-else class="crop-placeholder" />
+          <el-upload
+            class="avatar-uploader"
+            accept="image/*"
+            action="http://localhost:8000/photo/upload/15"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
+          >
+            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
         </div>
 
-        <image-crop :dialogVisible='dialogVisible'></image-crop>
 
       </div>
     </div>
@@ -58,15 +62,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, onMounted, toRefs, h } from "vue";
+import { defineComponent, reactive, onMounted, toRefs } from "vue";
 import { IUserinfo } from "../../typings";
 import { _updateInfo, _profile } from "../../api/profile/profile";
 import { ElMessage } from "element-plus";
-import ImageCrop from './ImageCrop.vue'
 
 export default defineComponent({
   name: "AddInfo",
-  components: { ImageCrop },
+  components: { },
   setup() {
     // 用户信息
     let userInfo: IUserinfo = reactive({
@@ -79,9 +82,8 @@ export default defineComponent({
 
     // 头像
     const data = reactive({
-      cropImg: '',
-      data: null,
-      dialogVisible: false
+      imgQuality: 0.5, // 压缩质量
+      imageUrl: ''
     })
 
     const refData = toRefs(data)
@@ -127,17 +129,57 @@ export default defineComponent({
     }
 
     /**
-     * @description:  控制弹窗打开与否
-     * @param {*}
+     * @description: 服务器返回结果处理方法
+     * @param {*} res
+     * @param {*} file
      * @return {*}
      */
-    function open () {
-      data.dialogVisible = true
+    function handleAvatarSuccess(res, file) {
+      data.imageUrl = URL.createObjectURL(file.raw);
+      console.log(res.msg)
     }
 
-    // 子组件传过来的弹窗状态
-    function dialogVisibles(v) {
-      data.dialogVisible = v
+    /**
+     * @description: base64转blob方法
+     * @param {*} dataURI
+     * @param {*} type
+     * @return {*}
+     */
+    function dataURItoBlob(dataURI, type) {
+      let binary = atob(dataURI.split(',')[1]);
+      let array = [];
+      for(var i = 0; i < binary.length; i++) {
+      array.push(binary.charCodeAt(i));
+      }
+      return new Blob([new Uint8Array(array)], {type: type});
+    }
+
+    /**
+     * @description: 在上传之前进行处理
+     * @param {*} file
+     * @return {*}
+     */
+    function beforeAvatarUpload(file) {
+      return new Promise(resolve => {
+        const reader = new FileReader()
+        const image = new Image()
+        image.onload = (imageEvent) => {
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+          const width = image.width * data.imgQuality
+          const height = image.height * data.imgQuality
+          canvas.width = width;
+          canvas.height = height;
+          context.clearRect(0, 0, width, height);
+          context.drawImage(image, 0, 0, width, height);
+          const dataUrl = canvas.toDataURL(file.type);
+          const blobData = dataURItoBlob(dataUrl, file.type);
+          resolve(blobData)
+          console.log(blobData)
+        }
+        reader.onload = (e => { image.src = e.target.result; });
+        reader.readAsDataURL(file);
+      })
     }
 
     onMounted(() => {
@@ -148,8 +190,8 @@ export default defineComponent({
     return {
       userInfo,
       updateInfo,
-      open,
-      dialogVisibles,
+      handleAvatarSuccess,
+      beforeAvatarUpload,
       ...refData
     }
   }
@@ -213,26 +255,30 @@ export default defineComponent({
             font-weight: 600;
           }
         }
-        .onclick {
+        .avatar-uploader .el-upload {
+          border: 1px dashed #d9d9d9;
+          border-radius: 6px;
+          cursor: pointer;
           position: relative;
-          top: 15rem;
-          width: 4rem;
-          height: 2rem;
-          border: 1px solid rgba(gray, $alpha: 0.5);
-          border-radius: 0.6rem;
-          background-color: #fff;
-          .upload {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: 550;
-            font-size: 1rem;
-            i,
-            span {
-              margin-top: 0.4rem;
-            }
-          }
+          overflow: hidden;
         }
+        .avatar-uploader .el-upload:hover {
+          border-color: #409EFF;
+        }
+        .avatar-uploader-icon {
+          font-size: 28px;
+          color: #8c939d;
+          width: 178px;
+          height: 178px;
+          line-height: 178px;
+          text-align: center;
+        }
+        .avatar {
+          width: 178px;
+          height: 178px;
+          display: block;
+        }
+
         .cropped-image {
           width: 13rem;
           height: 13rem;

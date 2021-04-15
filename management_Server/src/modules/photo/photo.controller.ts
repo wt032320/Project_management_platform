@@ -10,11 +10,15 @@ export class PhotoController {
     private readonly photoService: PhotoService
   ) { }
 
-  @Post('upload')
+  @Post('upload/:id')
   @ApiOperation({
     summary: '上传头像'
   })
-  public uploadImage(@Body() userImage: Photo) {
-    return this.photoService.uploadPhoto(userImage)
+  public uploadImage(@Param("id") userid: string, @Body() userImage: string) {
+    const userinfo: Photo = {
+      id: userid,
+      photo: userImage
+    }
+    return this.photoService.uploadPhoto(userinfo)
   }
 }
