@@ -35,9 +35,9 @@
           align="center"
         >
           <template #default="scope">
-            <el-button @click="handleClick(scope.row)" type="text" size="small">进入</el-button>
+            <el-button  type="text" size="small">进入</el-button>
             <el-button type="text" size="small">编辑</el-button>
-            <el-button type="text" size="small">删除</el-button>
+            <el-button @click="remove(scope.row)" type="text" size="small">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -59,7 +59,8 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, reactive, toRefs } from "vue";
-import{ _project } from '../../api/project/project'
+import { ElMessage } from 'element-plus';
+import{ _delete, _project } from '../../api/project/project'
 
 export default defineComponent({
   name: 'ProjectMain',
@@ -103,12 +104,35 @@ export default defineComponent({
       getTableData(page)
     }
 
+    /**
+     * @description: 删除项目
+     * @param {*}
+     * @return {*}
+     */
+    async function remove(raw) {
+      await _delete(raw.id).then(res => {
+        if (res.code === 0) {
+          ElMessage.success({
+            type: "success",
+            message: res.msg
+          })
+        } else {
+          ElMessage.warning({
+            type: "warning",
+            message: res.msg
+          })
+        }
+      })
+      getTableData()
+    }
+
     return {
       searchValue,
       tableData,
       pageCount,
       tableArgs,
-      pageChage
+      pageChage,
+      remove
     }
   }
 })
