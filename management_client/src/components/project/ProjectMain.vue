@@ -35,7 +35,7 @@
           align="center"
         >
           <template #default="scope">
-            <el-button  type="text" size="small">进入</el-button>
+            <el-button  @click="router.push('/project/particulars')" type="text" size="small">进入</el-button>
             <el-button type="text" size="small">编辑</el-button>
             <el-button @click="remove(scope.row)" type="text" size="small">删除</el-button>
           </template>
@@ -60,6 +60,7 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted, reactive, toRefs } from "vue";
 import { ElMessage } from 'element-plus';
+import router from '../../router/index';
 import{ _delete, _project } from '../../api/project/project'
 
 export default defineComponent({
@@ -132,7 +133,8 @@ export default defineComponent({
       pageCount,
       tableArgs,
       pageChage,
-      remove
+      remove,
+      router
     }
   }
 })

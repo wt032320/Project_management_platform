@@ -1,5 +1,4 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import component from '../shims-vue';
 
 // 路由懒加载
 const Auth = () => import('../views/Auth.vue')
@@ -10,6 +9,7 @@ const Friend = () => import('../components/friend/Friend.vue')
 const Profile = () => import('../components/profile/Profile.vue')
 const Community = () => import('../components/community/Community.vue')
 const AddInfo = () => import('../components/profile/AddInfo.vue')
+const Project = () => import('../components/project/Project.vue')
 
 const routes = [
   { 
@@ -43,6 +43,10 @@ const routes = [
       {
         path: 'prefect',
         component: AddInfo
+      },
+      {
+        path: 'particulars',
+        component: Project
       }
     ]
   }
